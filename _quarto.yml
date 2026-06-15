@@ -19,12 +19,12 @@ website:
         text: Finanzas Públicas
     right:
       - icon: github
-        href: https://github.com/Economia-y-politicas-publicas/mi-proyecto-datos
+        href: https://github.com/Economia-y-politicas-publicas/chiledatos
   page-footer:
     left: "© 2025 Economía y Políticas Públicas · Datos públicos de Chile"
     right:
       - icon: github
-        href: https://github.com/Economia-y-politicas-publicas/mi-proyecto-datos
+        href: https://github.com/Economia-y-politicas-publicas/chiledatos
 
 format:
   html:
@@ -42,7 +42,7 @@ format:
     fig-height: 5
 
 execute:
-  freeze: auto
+  freeze: false
   echo: false
   warning: false
   message: false
