@@ -12,12 +12,12 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 
-df = pd.read_excel(
-    "../../data/finanzas_publicas.xlsx",
-    sheet_name=0,
-    header=1,    # encabezado en fila 2 (índice 1)
-    usecols="B:J",  # columnas B hasta J
+df = pd.read_csv(
+    "../../data/finanzas_publicas.csv",
+    header=1,
+    usecols="B:J",
 )
+
 # Limpiar nombres de columnas
 df.columns = [
     "periodo", "deuda_bruta_gc", "deuda_neta_gc",
