@@ -3,7 +3,7 @@ name: Deploy Quarto Site
 on:
   push:
     branches: [main]
-  workflow_dispatch:   # permite correrlo manualmente desde GitHub
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -26,7 +26,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-          cache: "pip"
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
@@ -34,10 +33,10 @@ jobs:
       - name: Setup Quarto
         uses: quarto-dev/quarto-actions/setup@v2
         with:
-          version: "1.5.57"   # fija la versión para reproducibilidad
+          version: "1.5.57"
 
       - name: Render Quarto site
-        run: quarto render
+        run: quarto render --cache-refresh
 
       - name: Upload artifact para GitHub Pages
         uses: actions/upload-pages-artifact@v3
