@@ -1,86 +1,58 @@
-# Mi Proyecto de Datos
+# 📊 Economía y Políticas Públicas
 
-Sitio web de análisis de datos públicos chilenos, construido con Quarto + Python + Plotly.
+Hub de información económica sobre Chile y el mundo, construido con datos públicos y visualizaciones interactivas para el público general.
 
-## Estructura
+🌐 **Sitio web**: [economia-y-politicas-publicas.github.io/mi-proyecto-datos](https://economia-y-politicas-publicas.github.io/mi-proyecto-datos/)
 
-```
-.
-├── _quarto.yml          # Configuración global del sitio
-├── index.qmd            # Página de inicio
-├── pages/
-│   ├── educacion.qmd    # Análisis CAE
-│   ├── economia.qmd     # Indicadores macroeconómicos
-│   └── datos.qmd        # Fuentes de datos
-├── styles/
-│   └── custom.scss      # Estilos personalizados
-├── data/                # CSVs con datos reales (no subir a git si son pesados)
-├── requirements.txt
-└── .github/workflows/
-    └── deploy.yml       # Deploy automático a GitHub Pages
-```
+---
 
-## Setup local
+## ¿Qué encontrarás aquí?
 
-**1. Instalar Quarto**
-Descarga desde https://quarto.org/docs/get-started/
+| Sección | Descripción | Estado |
+|---|---|---|
+| 📈 **PIB** | Crecimiento económico de Chile y comparaciones internacionales | ✅ Disponible |
+| 👷 **Mercado laboral** | Empleo, desempleo y salarios | 🚧 En desarrollo |
+| 💸 **Inflación** | IPC, inflación subyacente y poder adquisitivo | 🚧 En desarrollo |
+| 🚢 **Comercio exterior** | Exportaciones, importaciones y balanza comercial | 🚧 En desarrollo |
+| 🏛️ **Finanzas públicas** | Gasto fiscal, deuda pública e ingresos del Estado | 🚧 En desarrollo |
+| 🌎 **Comparaciones internacionales** | Chile en el contexto de América Latina y el mundo | 🚧 En desarrollo |
 
-**2. Instalar dependencias Python**
-```bash
-pip install -r requirements.txt
-```
+---
 
-**3. Previsualizar el sitio**
-```bash
-quarto preview
-```
-Abre automáticamente en http://localhost:4242 con hot-reload.
+## Fuentes de datos
 
-**4. Renderizar**
-```bash
-quarto render
-```
-Genera el sitio estático en `_site/`.
+Todos los datos son públicos y verificables:
 
-## Deploy en GitHub Pages
+- [Banco Central de Chile](https://www.bcentral.cl) — PIB, inflación, balanza de pagos
+- [INE](https://www.ine.gob.cl) — Empleo, desempleo, IPC
+- [Dipres](https://www.dipres.gob.cl) — Finanzas públicas y presupuesto
+- [Banco Mundial](https://data.worldbank.org) — Comparaciones internacionales
+- [CEPAL](https://estadisticas.cepal.org) — América Latina
+- [MINEDUC](https://datosabiertos.mineduc.cl) — Educación
 
-**Primera vez:**
+---
 
-1. Crea un repo en GitHub y sube el proyecto:
-```bash
-git init
-git add .
-git commit -m "init"
-git remote add origin https://github.com/TUUSUARIO/REPO.git
-git push -u origin main
-```
+## Tecnología
 
-2. En GitHub → Settings → Pages → Source: **GitHub Actions**
+Este sitio está construido con herramientas de código abierto:
 
-3. El workflow en `.github/workflows/deploy.yml` se activa solo en cada push.
+- **[Quarto](https://quarto.org)** — Framework para publicación científica y de datos
+- **Python** (pandas, plotly) — Procesamiento y visualización de datos
+- **GitHub Actions** — Deploy automático en cada actualización
+- **GitHub Pages** — Hosting gratuito
 
-Tu sitio quedará en: `https://TUUSUARIO.github.io/REPO/`
+---
 
-## Usar datos reales del CAE
+## Cómo contribuir
 
-Reemplaza los datos simulados en `pages/educacion.qmd`:
+¿Tienes datos, correcciones o sugerencias? Puedes:
 
-```python
-# En vez de los datos simulados, carga tu CSV:
-df = pd.read_csv("../../data/cae_2023.csv", encoding="latin-1", sep=";")
-```
+1. Abrir un [Issue](https://github.com/Economia-y-politicas-publicas/mi-proyecto-datos/issues) con tu sugerencia
+2. Hacer un Pull Request con tus cambios
+3. Escribirnos a economiapp.contacto@gmail.com
 
-Descarga los datos desde:
-- https://datosabiertos.mineduc.cl
-- https://www.ingresa.cl/estadisticas/
+---
 
-## Agregar una nueva página
+## Licencia
 
-1. Crea `pages/nueva-pagina.qmd`
-2. Agrégala al navbar en `_quarto.yml`:
-```yaml
-navbar:
-  left:
-    - href: pages/nueva-pagina.qmd
-      text: Nueva Página
-```
+Los análisis y visualizaciones se publican bajo licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.es) — puedes reutilizarlos citando la fuente.
