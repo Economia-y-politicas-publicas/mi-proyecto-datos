@@ -14,8 +14,8 @@ import plotly.graph_objects as go
 
 df = pd.read_csv(
     "../../data/finanzas_publicas.csv",
-    header=1,
-    usecols="B:J",
+    sep=",",
+    encoding="latin-1",
 )
 
 # Limpiar nombres de columnas
