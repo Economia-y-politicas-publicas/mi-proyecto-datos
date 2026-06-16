@@ -32,9 +32,9 @@ def parsear_fecha(texto):
     mes_num = meses_es.get(mes, "01")
     return pd.to_datetime(f"{año}-{mes_num}-01")
 
-dt["fecha"] = dt["periodo"].apply(parsear_fecha)
+dt = pd.read_csv(url, sep=",", encoding="utf-8")
+dt["fecha"] = pd.to_datetime(dict(year=dt["Año"], month=dt["Mes"], day=1))
 dt = dt.sort_values("fecha").reset_index(drop=True)
-dt["brecha"] = dt["mujer"] - dt["hombre"]
 
 AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
 
