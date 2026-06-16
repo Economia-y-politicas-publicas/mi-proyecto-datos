@@ -53,7 +53,7 @@ fig = px.bar(
     text_auto=".2f",
     template="plotly_white",
 )
-fig.update_traces(textfont_size=26, textangle=0)
+fig.update_traces(textfont_size=14, textangle=0, textposition="outside")
 fig.update_layout(
     title=dict(text="Crecimiento anual del PIB real de Chile (1997–2025)", font=dict(size=18)),
     font=dict(family="Inter", size=15),
