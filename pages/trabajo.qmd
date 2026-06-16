@@ -26,9 +26,10 @@ meses_es = {
 }
 
 def parsear_fecha(texto):
-    partes = texto.strip().split(" - ")
-    ultimo = partes[-1].strip()  # "Mar 2010"
-    mes, año = ultimo.split()
+    # Tomar las últimas 2 palabras: "Mar 2010"
+    partes = texto.strip().split()
+    mes = partes[-2]
+    año = partes[-1]
     mes_en = meses_es.get(mes, mes)
     return pd.to_datetime(f"{mes_en} {año}", format="%b %Y", errors="coerce")
 
