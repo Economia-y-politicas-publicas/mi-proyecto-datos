@@ -18,23 +18,9 @@ dt = pd.read_csv(url, sep=",", encoding="utf-8")
 dt.columns = ["periodo", "total", "hombre", "mujer"]
 dt[["total","hombre","mujer"]] = dt[["total","hombre","mujer"]].apply(pd.to_numeric, errors="coerce")
 
-# Extraer el último mes y año: "Ene - Mar 2010" → "Mar 2010"
-meses_es = {
-    "Ene": "Jan", "Feb": "Feb", "Mar": "Mar", "Abr": "Apr",
-    "May": "May", "Jun": "Jun", "Jul": "Jul", "Ago": "Aug",
-    "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dic": "Dec"
-}
-
-def parsear_fecha(texto):
-    # Tomar las últimas 2 palabras: "Mar 2010"
-    partes = texto.strip().split()
-    mes = partes[-2]
-    año = partes[-1]
-    mes_en = meses_es.get(mes, mes)
-    return pd.to_datetime(f"{mes_en} {año}", format="%b %Y", errors="coerce")
-
-dt["fecha"] = dt["periodo"].apply(parsear_fecha)
-dt = dt.dropna(subset=["fecha"]).sort_values("fecha")
+# Extraer solo el año para ordenar
+dt["año"] = dt["periodo"].str.extract(r"(\d{4})").astype(int)
+dt = dt.sort_values("año").reset_index(drop=True)
 
 AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
 
@@ -56,15 +42,20 @@ def agregar_autor(fig):
 
 ```{python}
 fig = px.line(
-    dt, x="fecha", y="total",
+    dt, x="periodo", y="total",
     markers=False,
-    labels={"total": "Tasa de desempleo (%)", "fecha": "Período"},
+    labels={"total": "Tasa de desempleo (%)", "periodo": "Período"},
     template="plotly_white",
     color_discrete_sequence=["#f39c12"],
 )
 fig.update_layout(
     title="Tasa de desempleo total en Chile (%)",
     font_family="Inter",
+    xaxis=dict(
+        tickmode="array",
+        tickvals=dt[dt["periodo"].str.contains("Ene")].index.tolist(),
+        ticktext=dt[dt["periodo"].str.contains("Ene")]["año"].astype(str).tolist(),
+    ),
     yaxis=dict(tickformat=".1f"),
     margin=dict(b=80),
 )
@@ -77,21 +68,25 @@ fig.show()
 ```{python}
 fig = go.Figure()
 fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["total"],
+    x=dt.index, y=dt["total"],
     name="Total", line=dict(color="#f39c12", width=2),
 ))
 fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["hombre"],
+    x=dt.index, y=dt["hombre"],
     name="Hombre", line=dict(color="#2980b9", width=2),
 ))
 fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["mujer"],
+    x=dt.index, y=dt["mujer"],
     name="Mujer", line=dict(color="#e74c3c", width=2),
 ))
+
+ticks_idx = dt[dt["periodo"].str.contains("Ene")].index.tolist()
+ticks_txt = dt[dt["periodo"].str.contains("Ene")]["año"].astype(str).tolist()
+
 fig.update_layout(
     title="Tasa de desempleo por sexo (%)",
     yaxis_title="Tasa de desempleo (%)",
-    xaxis_title="Período",
+    xaxis=dict(tickmode="array", tickvals=ticks_idx, ticktext=ticks_txt),
     template="plotly_white",
     font_family="Inter",
     legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
@@ -108,8 +103,8 @@ fig.show()
 dt["brecha"] = dt["mujer"] - dt["hombre"]
 
 fig = px.area(
-    dt, x="fecha", y="brecha",
-    labels={"brecha": "Brecha (pp)", "fecha": "Período"},
+    dt, x=dt.index, y="brecha",
+    labels={"brecha": "Brecha (pp)", "x": "Período"},
     template="plotly_white",
     color_discrete_sequence=["#8e44ad"],
 )
@@ -117,6 +112,7 @@ fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
 fig.update_layout(
     title="Brecha de desempleo mujer − hombre (puntos porcentuales)",
     font_family="Inter",
+    xaxis=dict(tickmode="array", tickvals=ticks_idx, ticktext=ticks_txt),
     yaxis=dict(tickformat=".1f"),
     margin=dict(b=80),
 )
