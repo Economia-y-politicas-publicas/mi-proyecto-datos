@@ -30,30 +30,78 @@ cols_numericas = [
     "deuda_bruta_ep", "deuda_neta_ep",
 ]
 df[cols_numericas] = df[cols_numericas].apply(pd.to_numeric, errors="coerce")
-
 df["fecha"] = pd.to_datetime(df["periodo"], format="%b.%Y", errors="coerce")
 df = df.dropna(subset=["fecha"]).sort_values("fecha")
+
+AUTOR = "Autor: Juan Miguieles Onetto | Fuente: Banco Central de Chile"
+
+def agregar_autor(fig):
+    fig.update_layout(
+        annotations=[dict(
+            text=AUTOR,
+            x=0, y=-0.15,
+            xref="paper", yref="paper",
+            showarrow=False,
+            font=dict(size=10, color="gray"),
+            xanchor="left",
+        )]
+    )
+    return fig
 ```
 
-## Deuda bruta del Gobierno Central
+## 1. Gobierno Central
 
 ```{python}
-fig = px.line(
-    df, x="fecha", y="deuda_bruta_gc",
-    labels={"fecha": "Período", "deuda_bruta_gc": "% del PIB"},
-    template="plotly_white",
-    color_discrete_sequence=["#2980b9"],
-    markers=False,
-)
+fig = go.Figure()
+fig.add_trace(go.Scatter(
+    x=df["fecha"], y=df["deuda_bruta_gc"],
+    name="Deuda bruta", line=dict(color="#e74c3c"),
+))
+fig.add_trace(go.Scatter(
+    x=df["fecha"], y=df["deuda_neta_gc"],
+    name="Deuda neta", line=dict(color="#2980b9"),
+))
+fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
 fig.update_layout(
-    title="Deuda bruta del Gobierno Central (% del PIB)",
+    title="Gobierno Central: deuda bruta y neta (% del PIB)",
+    yaxis_title="% del PIB",
+    xaxis_title="Período",
+    template="plotly_white",
     font_family="Inter",
-    yaxis=dict(tickformat=".1f"),
+    legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
+    margin=dict(b=80),
 )
+agregar_autor(fig)
 fig.show()
 ```
 
-## Deuda neta vs bruta — Sector Público Consolidado
+## 2. Banco Central
+
+```{python}
+fig = go.Figure()
+fig.add_trace(go.Scatter(
+    x=df["fecha"], y=df["deuda_bruta_bc"],
+    name="Deuda bruta", line=dict(color="#e74c3c"),
+))
+fig.add_trace(go.Scatter(
+    x=df["fecha"], y=df["deuda_neta_bc"],
+    name="Deuda neta", line=dict(color="#2980b9"),
+))
+fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
+fig.update_layout(
+    title="Banco Central: deuda bruta y neta (% del PIB)",
+    yaxis_title="% del PIB",
+    xaxis_title="Período",
+    template="plotly_white",
+    font_family="Inter",
+    legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
+    margin=dict(b=80),
+)
+agregar_autor(fig)
+fig.show()
+```
+
+## 3. Sector Público Consolidado
 
 ```{python}
 fig = go.Figure()
@@ -68,46 +116,40 @@ fig.add_trace(go.Scatter(
 ))
 fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
 fig.update_layout(
-    title="Deuda bruta y neta — Sector Público Consolidado (% del PIB)",
+    title="Sector Público Consolidado: deuda bruta y neta (% del PIB)",
     yaxis_title="% del PIB",
     xaxis_title="Período",
     template="plotly_white",
     font_family="Inter",
-    yaxis=dict(tickformat=".1f"),
     legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
+    margin=dict(b=80),
 )
+agregar_autor(fig)
 fig.show()
 ```
 
-## Comparación por componente
+## 4. Empresas Públicas
 
 ```{python}
-fig = px.line(
-    df,
-    x="fecha",
-    y=["deuda_bruta_gc", "deuda_bruta_bc", "deuda_bruta_ep"],
-    labels={
-        "fecha": "Período",
-        "value": "% del PIB",
-        "variable": "Componente",
-    },
-    color_discrete_map={
-        "deuda_bruta_gc": "#2980b9",
-        "deuda_bruta_bc": "#e74c3c",
-        "deuda_bruta_ep": "#27ae60",
-    },
-    template="plotly_white",
-)
-fig.for_each_trace(lambda t: t.update(name={
-    "deuda_bruta_gc": "Gobierno Central",
-    "deuda_bruta_bc": "Banco Central",
-    "deuda_bruta_ep": "Empresas Públicas",
-}[t.name]))
+fig = go.Figure()
+fig.add_trace(go.Scatter(
+    x=df["fecha"], y=df["deuda_bruta_ep"],
+    name="Deuda bruta", line=dict(color="#e74c3c"),
+))
+fig.add_trace(go.Scatter(
+    x=df["fecha"], y=df["deuda_neta_ep"],
+    name="Deuda neta", line=dict(color="#2980b9"),
+))
+fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
 fig.update_layout(
-    title="Deuda bruta por componente (% del PIB)",
+    title="Empresas Públicas: deuda bruta y neta (% del PIB)",
+    yaxis_title="% del PIB",
+    xaxis_title="Período",
+    template="plotly_white",
     font_family="Inter",
-    yaxis=dict(tickformat=".1f"),
     legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
+    margin=dict(b=80),
 )
+agregar_autor(fig)
 fig.show()
 ```
