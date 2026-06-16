@@ -21,6 +21,7 @@ dt = dt.rename(columns={
 })
 dt[["año","mes","total","hombre","mujer"]] = dt[["año","mes","total","hombre","mujer"]].apply(pd.to_numeric, errors="coerce")
 dt = dt.dropna(subset=["año","mes","total"])
+dt = dt[(dt["año"] >= 2010) & (dt["año"] <= 2030)]  # filtro de seguridad
 dt["fecha"] = pd.to_datetime(dict(year=dt["año"], month=dt["mes"], day=1))
 dt = dt.sort_values("fecha").reset_index(drop=True)
 dt["brecha"] = dt["mujer"] - dt["hombre"]
@@ -49,6 +50,9 @@ ax.yaxis.set_major_formatter(ticker.FormatStrFormatter("%.1f"))
 ax.xaxis.set_major_locator(ticker.MaxNLocator(10))
 fig.autofmt_xdate(rotation=0, ha="center")
 fig.text(0, -0.05, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+fig.text(0, -0.08, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+fig.text(0, -0.14, "Nota: La tasa de desempleo se mide trimestralmente mediante la ENE.", 
+         fontsize=9, color="#aaaaaa", transform=ax.transAxes, style="italic")
 plt.tight_layout()
 plt.show()
 ```
@@ -70,6 +74,9 @@ ax.xaxis.set_major_locator(ticker.MaxNLocator(10))
 ax.legend(loc="upper right", frameon=False)
 fig.autofmt_xdate(rotation=0, ha="center")
 fig.text(0, -0.05, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+fig.text(0, -0.08, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+fig.text(0, -0.14, "Nota: La tasa de desempleo se mide trimestralmente mediante la ENE.", 
+         fontsize=9, color="#aaaaaa", transform=ax.transAxes, style="italic")
 plt.tight_layout()
 plt.show()
 ```
@@ -90,6 +97,9 @@ ax.yaxis.set_major_formatter(ticker.FormatStrFormatter("%.1f"))
 ax.xaxis.set_major_locator(ticker.MaxNLocator(10))
 fig.autofmt_xdate(rotation=0, ha="center")
 fig.text(0, -0.05, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+fig.text(0, -0.08, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+fig.text(0, -0.14, "Nota: La tasa de desempleo se mide trimestralmente mediante la ENE.", 
+         fontsize=9, color="#aaaaaa", transform=ax.transAxes, style="italic")
 plt.tight_layout()
 plt.show()
 ```
