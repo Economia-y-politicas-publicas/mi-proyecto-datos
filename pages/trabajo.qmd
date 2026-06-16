@@ -9,20 +9,15 @@ date: last-modified
 #| include: false
 
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
 
 url = "https://raw.githubusercontent.com/Economia-y-politicas-publicas/chiledatos/main/data/trabajo.csv"
 
 dt = pd.read_csv(url, sep=",", encoding="utf-8")
-# Usar nombres del CSV directamente
 dt = dt.rename(columns={
-    "Tiempo": "periodo",
-    "Año": "año", 
-    "Mes": "mes",
-    "Total": "total",
-    "Hombre": "hombre",
-    "Mujer": "mujer"
+    "Tiempo": "periodo", "Año": "año", "Mes": "mes",
+    "Total": "total", "Hombre": "hombre", "Mujer": "mujer"
 })
 dt[["año","mes","total","hombre","mujer"]] = dt[["año","mes","total","hombre","mujer"]].apply(pd.to_numeric, errors="coerce")
 dt = dt.dropna(subset=["año","mes","total"])
@@ -32,95 +27,69 @@ dt["brecha"] = dt["mujer"] - dt["hombre"]
 
 AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
 
-def agregar_autor(fig):
-    fig.update_layout(
-        annotations=[dict(
-            text=AUTOR,
-            x=0, y=-0.15,
-            xref="paper", yref="paper",
-            showarrow=False,
-            font=dict(size=10, color="gray"),
-            xanchor="left",
-        )]
-    )
-    return fig
-
-eje_x = dict(
-    dtick="M12",
-    tickformat="%Y",
-    tickangle=0,
-    tickfont=dict(size=12),
-)
+plt.rcParams.update({
+    "font.family": "sans-serif",
+    "axes.spines.top": False,
+    "axes.spines.right": False,
+    "figure.dpi": 120,
+})
 ```
 
 ## 1. Tasa de desempleo total
 
 ```{python}
-fig = px.line(
-    dt, x="fecha", y="total",
-    markers=False,
-    labels={"total": "Tasa de desempleo (%)", "fecha": "Año"},
-    template="plotly_white",
-    color_discrete_sequence=["#f39c12"],
-)
-fig.update_layout(
-    title="Tasa de desempleo total en Chile (%)",
-    font_family="Inter",
-    xaxis=eje_x,
-    yaxis=dict(tickformat=".1f"),
-    margin=dict(b=80),
-)
-agregar_autor(fig)
-fig.show()
+#| fig-cap: "Tasa de desempleo total en Chile (%)"
+
+fig, ax = plt.subplots(figsize=(10, 4))
+ax.plot(dt["fecha"], dt["total"], color="#f39c12", linewidth=2)
+ax.set_title("Tasa de desempleo total en Chile (%)", fontsize=14, fontweight="bold", pad=12)
+ax.set_xlabel("Año")
+ax.set_ylabel("Tasa de desempleo (%)")
+ax.yaxis.set_major_formatter(ticker.FormatStrFormatter("%.1f"))
+ax.xaxis.set_major_locator(ticker.MaxNLocator(10))
+fig.autofmt_xdate(rotation=0, ha="center")
+fig.text(0, -0.05, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+plt.tight_layout()
+plt.show()
 ```
 
 ## 2. Desempleo por sexo
 
 ```{python}
-fig = go.Figure()
-fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["total"],
-    name="Total", line=dict(color="#f39c12", width=2),
-))
-fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["hombre"],
-    name="Hombre", line=dict(color="#2980b9", width=2),
-))
-fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["mujer"],
-    name="Mujer", line=dict(color="#e74c3c", width=2),
-))
-fig.update_layout(
-    title="Tasa de desempleo por sexo (%)",
-    yaxis_title="Tasa de desempleo (%)",
-    xaxis=eje_x,
-    template="plotly_white",
-    font_family="Inter",
-    legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
-    yaxis=dict(tickformat=".1f"),
-    margin=dict(b=80),
-)
-agregar_autor(fig)
-fig.show()
+#| fig-cap: "Tasa de desempleo por sexo (%)"
+
+fig, ax = plt.subplots(figsize=(10, 4))
+ax.plot(dt["fecha"], dt["total"],  color="#f39c12", linewidth=2, label="Total")
+ax.plot(dt["fecha"], dt["hombre"], color="#2980b9", linewidth=2, label="Hombre")
+ax.plot(dt["fecha"], dt["mujer"],  color="#e74c3c", linewidth=2, label="Mujer")
+ax.set_title("Tasa de desempleo por sexo (%)", fontsize=14, fontweight="bold", pad=12)
+ax.set_xlabel("Año")
+ax.set_ylabel("Tasa de desempleo (%)")
+ax.yaxis.set_major_formatter(ticker.FormatStrFormatter("%.1f"))
+ax.xaxis.set_major_locator(ticker.MaxNLocator(10))
+ax.legend(loc="upper right", frameon=False)
+fig.autofmt_xdate(rotation=0, ha="center")
+fig.text(0, -0.05, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+plt.tight_layout()
+plt.show()
 ```
 
 ## 3. Brecha de desempleo mujer − hombre
 
 ```{python}
-fig = px.area(
-    dt, x="fecha", y="brecha",
-    labels={"brecha": "Brecha (pp)", "fecha": "Año"},
-    template="plotly_white",
-    color_discrete_sequence=["#8e44ad"],
-)
-fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
-fig.update_layout(
-    title="Brecha de desempleo mujer − hombre (puntos porcentuales)",
-    font_family="Inter",
-    xaxis=eje_x,
-    yaxis=dict(tickformat=".1f"),
-    margin=dict(b=80),
-)
-agregar_autor(fig)
-fig.show()
+#| fig-cap: "Brecha de desempleo mujer − hombre (puntos porcentuales)"
+
+fig, ax = plt.subplots(figsize=(10, 4))
+ax.fill_between(dt["fecha"], dt["brecha"], color="#8e44ad", alpha=0.4)
+ax.plot(dt["fecha"], dt["brecha"], color="#8e44ad", linewidth=1.5)
+ax.axhline(0, color="gray", linestyle="--", linewidth=0.8)
+ax.set_title("Brecha de desempleo mujer − hombre (pp)", fontsize=14, fontweight="bold", pad=12)
+ax.set_xlabel("Año")
+ax.set_ylabel("Puntos porcentuales")
+ax.yaxis.set_major_formatter(ticker.FormatStrFormatter("%.1f"))
+ax.xaxis.set_major_locator(ticker.MaxNLocator(10))
+fig.autofmt_xdate(rotation=0, ha="center")
+fig.text(0, -0.05, AUTOR, fontsize=9, color="gray", transform=ax.transAxes)
+plt.tight_layout()
+plt.show()
 ```
