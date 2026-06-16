@@ -26,6 +26,11 @@ dt["fecha"] = pd.to_datetime(dict(year=dt["año"], month=dt["mes"], day=1))
 dt = dt.sort_values("fecha").reset_index(drop=True)
 dt["brecha"] = dt["mujer"] - dt["hombre"]
 
+
+print(dt[["periodo","año","mes","fecha"]].head(20))
+print(dt[["periodo","año","mes","fecha"]].tail(20))
+print(f"Rango de fechas: {dt['fecha'].min()} a {dt['fecha'].max()}")
+
 AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
 
 plt.rcParams.update({
