@@ -18,9 +18,14 @@ dt = pd.read_csv(url, sep=",", encoding="utf-8")
 dt.columns = ["periodo", "total", "hombre", "mujer"]
 dt[["total","hombre","mujer"]] = dt[["total","hombre","mujer"]].apply(pd.to_numeric, errors="coerce")
 
-# Extraer solo el año para ordenar
 dt["año"] = dt["periodo"].str.extract(r"(\d{4})").astype(int)
 dt = dt.sort_values("año").reset_index(drop=True)
+dt["brecha"] = dt["mujer"] - dt["hombre"]
+
+# Ticks: solo enero de cada año
+mask_ene = dt["periodo"].str.contains("Ene")
+ticks_idx = dt[mask_ene].index.tolist()
+ticks_txt = dt[mask_ene]["año"].astype(str).tolist()
 
 AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
 
@@ -36,26 +41,30 @@ def agregar_autor(fig):
         )]
     )
     return fig
+
+eje_x = dict(
+    tickmode="array",
+    tickvals=ticks_idx,
+    ticktext=ticks_txt,
+    tickangle=0,
+    tickfont=dict(size=12),
+)
 ```
 
 ## 1. Tasa de desempleo total
 
 ```{python}
 fig = px.line(
-    dt, x="periodo", y="total",
+    dt, x=dt.index, y="total",
     markers=False,
-    labels={"total": "Tasa de desempleo (%)", "periodo": "Período"},
+    labels={"total": "Tasa de desempleo (%)", "x": "Año"},
     template="plotly_white",
     color_discrete_sequence=["#f39c12"],
 )
 fig.update_layout(
     title="Tasa de desempleo total en Chile (%)",
     font_family="Inter",
-    xaxis=dict(
-        tickmode="array",
-        tickvals=dt[dt["periodo"].str.contains("Ene")].index.tolist(),
-        ticktext=dt[dt["periodo"].str.contains("Ene")]["año"].astype(str).tolist(),
-    ),
+    xaxis=eje_x,
     yaxis=dict(tickformat=".1f"),
     margin=dict(b=80),
 )
@@ -79,14 +88,10 @@ fig.add_trace(go.Scatter(
     x=dt.index, y=dt["mujer"],
     name="Mujer", line=dict(color="#e74c3c", width=2),
 ))
-
-ticks_idx = dt[dt["periodo"].str.contains("Ene")].index.tolist()
-ticks_txt = dt[dt["periodo"].str.contains("Ene")]["año"].astype(str).tolist()
-
 fig.update_layout(
     title="Tasa de desempleo por sexo (%)",
     yaxis_title="Tasa de desempleo (%)",
-    xaxis=dict(tickmode="array", tickvals=ticks_idx, ticktext=ticks_txt),
+    xaxis=eje_x,
     template="plotly_white",
     font_family="Inter",
     legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
@@ -100,11 +105,9 @@ fig.show()
 ## 3. Brecha de desempleo mujer − hombre
 
 ```{python}
-dt["brecha"] = dt["mujer"] - dt["hombre"]
-
 fig = px.area(
     dt, x=dt.index, y="brecha",
-    labels={"brecha": "Brecha (pp)", "x": "Período"},
+    labels={"brecha": "Brecha (pp)", "x": "Año"},
     template="plotly_white",
     color_discrete_sequence=["#8e44ad"],
 )
@@ -112,7 +115,7 @@ fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
 fig.update_layout(
     title="Brecha de desempleo mujer − hombre (puntos porcentuales)",
     font_family="Inter",
-    xaxis=dict(tickmode="array", tickvals=ticks_idx, ticktext=ticks_txt),
+    xaxis=eje_x,
     yaxis=dict(tickformat=".1f"),
     margin=dict(b=80),
 )
