@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 
 url = "https://raw.githubusercontent.com/Economia-y-politicas-publicas/chiledatos/main/data/finanzas_publicas.csv"
 
-df = pd.read_csv(url, sep="\t", encoding="latin-1", decimal=",")
+df = pd.read_csv(url, sep=";", encoding="latin-1")
 
 df.columns = [
     "periodo", "deuda_bruta_gc", "deuda_neta_gc",
@@ -29,7 +29,7 @@ cols_numericas = [
     "deuda_bruta_sp", "deuda_neta_sp",
     "deuda_bruta_ep", "deuda_neta_ep",
 ]
-
+df[cols_numericas] = df[cols_numericas].apply(pd.to_numeric, errors="coerce")
 
 df["fecha"] = pd.to_datetime(df["periodo"], format="%b.%Y", errors="coerce")
 df = df.dropna(subset=["fecha"]).sort_values("fecha")
