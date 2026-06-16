@@ -15,10 +15,24 @@ import plotly.graph_objects as go
 url = "https://raw.githubusercontent.com/Economia-y-politicas-publicas/chiledatos/main/data/trabajo.csv"
 
 dt = pd.read_csv(url, sep=",", encoding="utf-8")
-
 dt.columns = ["periodo", "total", "hombre", "mujer"]
 dt[["total","hombre","mujer"]] = dt[["total","hombre","mujer"]].apply(pd.to_numeric, errors="coerce")
-dt["fecha"] = pd.to_datetime(dt["periodo"].str.extract(r"(\w{3} \d{4})")[0], format="%b %Y", errors="coerce")
+
+# Extraer el último mes y año: "Ene - Mar 2010" → "Mar 2010"
+meses_es = {
+    "Ene": "Jan", "Feb": "Feb", "Mar": "Mar", "Abr": "Apr",
+    "May": "May", "Jun": "Jun", "Jul": "Jul", "Ago": "Aug",
+    "Sep": "Sep", "Oct": "Oct", "Nov": "Nov", "Dic": "Dec"
+}
+
+def parsear_fecha(texto):
+    partes = texto.strip().split(" - ")
+    ultimo = partes[-1].strip()  # "Mar 2010"
+    mes, año = ultimo.split()
+    mes_en = meses_es.get(mes, mes)
+    return pd.to_datetime(f"{mes_en} {año}", format="%b %Y", errors="coerce")
+
+dt["fecha"] = dt["periodo"].apply(parsear_fecha)
 dt = dt.dropna(subset=["fecha"]).sort_values("fecha")
 
 AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
