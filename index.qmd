@@ -10,9 +10,10 @@ toc: false
   <p class="lead">
     Hub de información económica sobre Chile y el mundo, construido con datos públicos e interactivos.
   </p>
-  <a href="pages/economia.qmd" class="btn btn-primary btn-lg me-2">Ver PIB</a>
-  <a href="pages/finanzas_publicas.qmd" class="btn btn-secondary btn-lg me-2">Ver Finanzas Públicas</a>
-  <a href="pages/educacion.qmd" class="btn btn-outline-secondary btn-lg">Ver Educación</a>
+  <a href="pages/economia.qmd" class="btn btn-success btn-lg me-2">Ver PIB</a>
+  <a href="pages/finanzas_publicas.qmd" class="btn btn-info btn-lg me-2">Ver Finanzas Públicas</a>
+  <a href="pages/educacion.qmd" class="btn btn-warning btn-lg me-2">Ver Educación</a>
+  <a href="pages/datos.qmd" class="btn btn-danger btn-lg">Ver Datos</a>
 </div>
 ```
 
