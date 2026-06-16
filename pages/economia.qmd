@@ -56,7 +56,7 @@ fig = px.bar(
 fig.update_traces(textfont_size=11, textangle=0)
 fig.update_layout(
     title=dict(text="Crecimiento anual del PIB real de Chile (1997–2025)", font=dict(size=18)),
-    font=dict(family="Inter", size=14),
+    font=dict(family="Inter", size=18),
     legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
     yaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor="black", tickfont=dict(size=13)),
     xaxis=dict(tickfont=dict(size=13)),
