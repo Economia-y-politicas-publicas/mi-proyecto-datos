@@ -15,26 +15,11 @@ import plotly.graph_objects as go
 url = "https://raw.githubusercontent.com/Economia-y-politicas-publicas/chiledatos/main/data/trabajo.csv"
 
 dt = pd.read_csv(url, sep=",", encoding="utf-8")
-dt.columns = ["periodo", "total", "hombre", "mujer"]
-dt[["total","hombre","mujer"]] = dt[["total","hombre","mujer"]].apply(pd.to_numeric, errors="coerce")
-
-# Construir fecha desde el último mes del trimestre
-meses_es = {
-    "Ene":"01","Feb":"02","Mar":"03","Abr":"04",
-    "May":"05","Jun":"06","Jul":"07","Ago":"08",
-    "Sep":"09","Oct":"10","Nov":"11","Dic":"12"
-}
-
-def parsear_fecha(texto):
-    partes = texto.strip().split()
-    mes = partes[-2]   # último mes
-    año = partes[-1]   # año
-    mes_num = meses_es.get(mes, "01")
-    return pd.to_datetime(f"{año}-{mes_num}-01")
-
-dt = pd.read_csv(url, sep=",", encoding="utf-8")
-dt["fecha"] = pd.to_datetime(dict(year=dt["Año"], month=dt["Mes"], day=1))
+dt.columns = ["periodo", "año", "mes", "total", "hombre", "mujer"]
+dt[["año","mes","total","hombre","mujer"]] = dt[["año","mes","total","hombre","mujer"]].apply(pd.to_numeric, errors="coerce")
+dt["fecha"] = pd.to_datetime(dict(year=dt["año"], month=dt["mes"], day=1))
 dt = dt.sort_values("fecha").reset_index(drop=True)
+dt["brecha"] = dt["mujer"] - dt["hombre"]
 
 AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
 
@@ -50,6 +35,13 @@ def agregar_autor(fig):
         )]
     )
     return fig
+
+eje_x = dict(
+    dtick="M12",
+    tickformat="%Y",
+    tickangle=0,
+    tickfont=dict(size=12),
+)
 ```
 
 ## 1. Tasa de desempleo total
@@ -65,7 +57,7 @@ fig = px.line(
 fig.update_layout(
     title="Tasa de desempleo total en Chile (%)",
     font_family="Inter",
-    xaxis=dict(dtick="M12", tickformat="%Y", tickangle=0, tickfont=dict(size=12)),
+    xaxis=eje_x,
     yaxis=dict(tickformat=".1f"),
     margin=dict(b=80),
 )
@@ -92,7 +84,7 @@ fig.add_trace(go.Scatter(
 fig.update_layout(
     title="Tasa de desempleo por sexo (%)",
     yaxis_title="Tasa de desempleo (%)",
-    xaxis=dict(dtick="M12", tickformat="%Y", tickangle=0, tickfont=dict(size=12)),
+    xaxis=eje_x,
     template="plotly_white",
     font_family="Inter",
     legend=dict(orientation="h", y=-0.2, x=0.5, xanchor="center"),
@@ -116,7 +108,7 @@ fig.add_hline(y=0, line_dash="dash", line_color="gray", opacity=0.5)
 fig.update_layout(
     title="Brecha de desempleo mujer − hombre (puntos porcentuales)",
     font_family="Inter",
-    xaxis=dict(dtick="M12", tickformat="%Y", tickangle=0, tickfont=dict(size=12)),
+    xaxis=eje_x,
     yaxis=dict(tickformat=".1f"),
     margin=dict(b=80),
 )
