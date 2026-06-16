@@ -14,7 +14,9 @@ import plotly.graph_objects as go
 
 url = "https://raw.githubusercontent.com/Economia-y-politicas-publicas/chiledatos/main/data/trabajo.csv"
 
-dt = pd.read_csv(url, sep=",", encoding="utf-8")
+dt = pd.read_csv(url, sep=",", encoding="utf-8", header=0)
+print(dt.head())  # para verificar temporalmente
+print(dt.dtypes)
 # Usar los nombres originales del CSV
 dt.columns = ["periodo", "año", "mes", "total", "hombre", "mujer"]
 dt = dt.dropna(subset=["año", "mes", "total"])  # elimina filas vacías
