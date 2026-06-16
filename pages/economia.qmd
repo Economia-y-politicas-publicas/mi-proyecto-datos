@@ -4,6 +4,25 @@ subtitle: "Crecimiento del PIB real en Chile"
 date: last-modified
 ---
 
+## ¿Qué es el PIB?
+
+El **Producto Interno Bruto (PIB)** mide el valor total de todos los bienes y servicios producidos dentro de un país en un período determinado. Es el indicador más usado para medir el tamaño y la salud de una economía.
+
+Cuando el PIB crece, significa que la economía produce más — lo que generalmente se traduce en más empleo e ingresos. Cuando cae, como ocurrió en Chile en 2020 (-6,14%) por la pandemia del COVID-19, indica una contracción económica.
+
+### ¿Por qué se usa el PIB encadenado?
+
+El PIB puede medirse a **precios corrientes** (nominales) o a **precios encadenados** (reales). La diferencia es importante:
+
+- **PIB nominal** incluye el efecto de la inflación — si los precios suben, el PIB sube aunque no se produzca más.
+- **PIB real encadenado** elimina el efecto de la inflación, permitiendo comparar el crecimiento verdadero entre años.
+
+La técnica de **encadenamiento** actualiza el año de referencia periódicamente, evitando que los precios de un año base distorsionen las comparaciones a largo plazo. Es el estándar internacional recomendado por el FMI y usado por el Banco Central de Chile.
+
+> En los gráficos siguientes se usa siempre el PIB real encadenado, expresado como **tasa de variación anual (%)**.
+
+---
+
 ```{python}
 #| label: setup
 #| include: false

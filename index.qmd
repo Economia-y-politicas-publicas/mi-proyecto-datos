@@ -6,13 +6,13 @@ toc: false
 
 ```{=html}
 <div class="hero">
-  <h1>📊 Mi Proyecto de Datos</h1>
+  <h1>📊 Economía y Políticas Públicas</h1>
   <p class="lead">
-    Análisis interactivos de datos públicos chilenos.
-    Explora las secciones para ver los gráficos.
+    Hub de información económica sobre Chile y el mundo, construido con datos públicos e interactivos.
   </p>
-  <a href="pages/educacion.qmd" class="btn btn-primary btn-lg me-2">Ver Educación</a>
-  <a href="pages/economia.qmd" class="btn btn-outline-secondary btn-lg">Ver Economía</a>
+  <a href="pages/economia.qmd" class="btn btn-primary btn-lg me-2">Ver PIB</a>
+  <a href="pages/finanzas_publicas.qmd" class="btn btn-secondary btn-lg me-2">Ver Finanzas Públicas</a>
+  <a href="pages/educacion.qmd" class="btn btn-outline-secondary btn-lg">Ver Educación</a>
 </div>
 ```
 
@@ -20,21 +20,27 @@ toc: false
 
 ::: {.grid}
 
-::: {.g-col-12 .g-col-md-4}
-### 🎓 Educación
-Análisis del Crédito con Aval del Estado (CAE): morosidad por carrera, institución y región.
-[Ver análisis →](pages/educacion.qmd)
-:::
-
-::: {.g-col-12 .g-col-md-4}
-### 💰 Economía
-Indicadores macroeconómicos: deuda pública, PIB, empleo.
+::: {.g-col-12 .g-col-md-3}
+### 📈 PIB
+Crecimiento económico de Chile desde 1997, con datos del Banco Central.
 [Ver análisis →](pages/economia.qmd)
 :::
 
-::: {.g-col-12 .g-col-md-4}
+::: {.g-col-12 .g-col-md-3}
+### 🏛️ Finanzas Públicas
+Deuda bruta y neta del sector público consolidado como % del PIB.
+[Ver análisis →](pages/finanzas_publicas.qmd)
+:::
+
+::: {.g-col-12 .g-col-md-3}
+### 🎓 Educación
+Análisis del Crédito con Aval del Estado (CAE).
+[Ver análisis →](pages/educacion.qmd)
+:::
+
+::: {.g-col-12 .g-col-md-3}
 ### 📁 Datos
-Todos los datos usados son públicos y descargables.
+Todas las fuentes son públicas y descargables.
 [Ver fuentes →](pages/datos.qmd)
 :::
 
@@ -42,40 +48,19 @@ Todos los datos usados son públicos y descargables.
 
 ---
 
-```{python}
-#| label: resumen-portada
-#| fig-cap: "Ejemplo: datos simulados de morosidad CAE por tipo de institución"
+## ¿Qué es el PIB?
 
-import plotly.express as px
-import pandas as pd
-import numpy as np
+El **Producto Interno Bruto (PIB)** mide el valor total de todos los bienes y servicios producidos dentro de un país en un período determinado. Es el indicador más usado para medir el tamaño y la salud de una economía.
 
-np.random.seed(42)
+Cuando el PIB crece, significa que la economía produce más — lo que generalmente se traduce en más empleo e ingresos. Cuando cae, como ocurrió en Chile en 2020 (-6,14%) por la pandemia del COVID-19, indica una contracción económica.
 
-instituciones = ["U. Tradicional", "U. Privada", "IP", "CFT"]
-data = pd.DataFrame({
-    "Institución": np.repeat(instituciones, 30),
-    "Morosidad (%)": np.concatenate([
-        np.random.normal(28, 5, 30),
-        np.random.normal(45, 8, 30),
-        np.random.normal(52, 7, 30),
-        np.random.normal(58, 9, 30),
-    ]),
-})
+### ¿Por qué se usa el PIB encadenado?
 
-fig = px.box(
-    data,
-    x="Institución",
-    y="Morosidad (%)",
-    color="Institución",
-    color_discrete_sequence=px.colors.qualitative.Set2,
-    title="Distribución de morosidad CAE por tipo de institución",
-    template="plotly_white",
-)
-fig.update_layout(
-    showlegend=False,
-    font_family="Inter",
-    title_font_size=16,
-)
-fig.show()
-```
+El PIB puede medirse a **precios corrientes** (nominales) o a **precios encadenados** (reales). La diferencia es importante:
+
+- **PIB nominal** incluye el efecto de la inflación — si los precios suben, el PIB sube aunque no se produzca más.
+- **PIB real encadenado** elimina el efecto de la inflación, permitiendo comparar el crecimiento verdadero entre años.
+
+La técnica de **encadenamiento** actualiza el año de referencia periódicamente (en Chile se usa una canasta que se actualiza cada año), lo que evita que los precios de un año base distorsionen las comparaciones a largo plazo. Por eso es el estándar internacional recomendado por el FMI y usado por el Banco Central de Chile.
+
+> En los gráficos de este sitio usamos siempre el PIB real encadenado, expresado como **tasa de variación anual (%)**.
