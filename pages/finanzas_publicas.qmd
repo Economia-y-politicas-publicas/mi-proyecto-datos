@@ -13,7 +13,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 df = pd.read_csv(
-    "data/finanzas_publicas.csv",
+    "../../data/finanzas_publicas.csv",
     sep=",",
     encoding="latin-1",
 )
