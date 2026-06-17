@@ -161,3 +161,76 @@ El peak de 2021 refleja el efecto prolongado de la pandemia: muchas personas per
 from IPython.display import Image
 Image("../imagenes/trabajo/linkedin.png", width=800)
 ```
+
+---
+
+## 5. Tasa de desempleo por región
+
+El mercado laboral tiene un fuerte componente territorial. La matriz productiva de cada región determina su dinámica de empleo; por ejemplo, las regiones del norte están fuertemente influenciadas por los ciclos de la minería, mientras que las del centro y sur dependen más de la agricultura, el comercio y los servicios. 
+
+A continuación, puedes explorar la evolución de la tasa de desempleo seleccionando la región específica en el menú desplegable:
+
+```{python}
+# Identificar las columnas de las regiones (aquellas que contienen "Región")
+columnas_regiones = [col for col in dt.columns if "Región" in col]
+
+# Asegurar que las columnas regionales sean numéricas
+for col in columnas_regiones:
+    dt[col] = pd.to_numeric(dt[col], errors="coerce")
+
+fig = go.Figure()
+
+# Limpiar los nombres de las regiones (quitar el "1.x. " del inicio)
+nombres_regiones = [col.split(". ", 1)[-1] if ". " in col else col for col in columnas_regiones]
+
+# Agregar una línea (trace) por cada región
+for i, col in enumerate(columnas_regiones):
+    fig.add_trace(go.Scatter(
+        x=dt["fecha"], 
+        y=dt[col],
+        name=nombres_regiones[i],
+        visible=(i == 0), # Solo la primera región es visible por defecto
+        line=dict(color="#27ae60", width=2)
+    ))
+
+# Crear los botones del menú desplegable
+botones = []
+for i, nombre in enumerate(nombres_regiones):
+    # Crear una lista de booleanos donde solo la región seleccionada es True
+    visibilidad = [False] * len(columnas_regiones)
+    visibilidad[i] = True
+    
+    boton = dict(
+        label=nombre,
+        method="update",
+        args=[{"visible": visibilidad},
+              {"title": dict(text=f"Tasa de desempleo: {nombre} (%)", font=dict(size=16))}]
+    )
+    botones.append(boton)
+
+# Configurar el diseño y agregar el menú
+fig.update_layout(
+    title=dict(text=f"Tasa de desempleo: {nombres_regiones[0]} (%)", font=dict(size=16)),
+    yaxis_title="Tasa de desempleo (%)",
+    xaxis=eje_x,
+    template="plotly_white",
+    font_family="Inter",
+    yaxis=dict(tickformat=".1f"),
+    margin=dict(b=120, t=100), # Mayor margen superior para que quepa el menú
+    height=500,
+    updatemenus=[dict(
+        active=0,
+        buttons=botones,
+        x=0.0,
+        xanchor="left",
+        y=1.15,
+        yanchor="top",
+        direction="down",
+        showactive=True,
+        bgcolor="white",
+        bordercolor="gray"
+    )]
+)
+
+agregar_autor(fig)
+fig.show()
