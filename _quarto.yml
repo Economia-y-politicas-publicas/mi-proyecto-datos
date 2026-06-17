@@ -24,13 +24,10 @@ website:
       - href: pages/trabajo.qmd
         text: Mercado Laboral
       - href: pages/indicadores_vivo.qmd
-        text: 📡 Indicadores en Vivo
-
-
+        text: "📡 Indicadores en Vivo"
     right:
       - icon: github
         href: https://github.com/Economia-y-politicas-publicas/chiledatos
-
   page-footer:
     left: "© 2026 Economía y Políticas Públicas · Datos públicos de Chile"
     right:
@@ -57,4 +54,3 @@ execute:
   echo: false
   warning: false
   message: false
-
