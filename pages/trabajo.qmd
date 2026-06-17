@@ -169,6 +169,8 @@ Selecciona una o más regiones para comparar su evolución en el tiempo. Las dif
 
 ```{python}
 # Identificar columnas de regiones
+```{python}
+# Identificar columnas de regiones
 columnas_excluir = ["periodo", "año", "mes", "total", "hombre", "mujer", "fecha", "brecha"]
 columnas_regiones = [col for col in dt.columns if col not in columnas_excluir]
 
@@ -179,7 +181,7 @@ for col in columnas_regiones:
         errors="coerce"
     )
 
-# Paleta de colores para distinguir regiones
+# Paleta de colores de alto contraste
 colores = [
     "#e74c3c","#2980b9","#27ae60","#f39c12","#8e44ad",
     "#16a085","#d35400","#2c3e50","#c0392b","#1abc9c",
@@ -194,7 +196,7 @@ for i, col in enumerate(columnas_regiones):
         y=dt[col],
         name=col,
         visible=True if col == "Metropolitana" else "legendonly",
-        line=dict(color=colores[i % len(colores)], width=2),
+        line=dict(color=colores[i % len(colores)], width=3),
         hovertemplate=f"<b>{col}</b><br>%{{x|%b %Y}}<br>%{{y:.1f}}%<extra></extra>",
     ))
 
@@ -205,18 +207,53 @@ fig.update_layout(
     template="plotly_white",
     font_family="Inter",
     yaxis=dict(tickformat=".1f"),
-    margin=dict(b=120, t=80),
-    height=500,
+    margin=dict(b=160, t=80),
+    height=520,
     legend=dict(
         orientation="v",
         x=1.02,
         y=1,
         xanchor="left",
         title="Regiones<br><i style='font-size:10px'>clic para mostrar/ocultar</i>",
+        bgcolor="rgba(255,255,255,0.9)",
+        bordercolor="lightgray",
+        borderwidth=1,
     ),
     xaxis_rangeslider=dict(visible=True),
+    # Botón para limpiar el gráfico
+    updatemenus=[dict(
+        type="buttons",
+        showactive=False,
+        x=0.0,
+        y=-0.25,
+        xanchor="left",
+        yanchor="top",
+        buttons=[
+            dict(
+                label="🗑 Limpiar selección",
+                method="restyle",
+                args=["visible", ["legendonly"] * len(columnas_regiones)],
+            ),
+            dict(
+                label="✅ Mostrar todas",
+                method="restyle",
+                args=["visible", [True] * len(columnas_regiones)],
+            ),
+        ],
+        bgcolor="white",
+        bordercolor="gray",
+        font=dict(size=12),
+    )],
 )
 
-agregar_autor(fig)
+# Notas más abajo
+fig.update_layout(
+    annotations=[
+        dict(text=AUTOR, x=0, y=-0.35, xref="paper", yref="paper",
+             showarrow=False, font=dict(size=10, color="gray"), xanchor="left"),
+        dict(text=NOTA, x=0, y=-0.42, xref="paper", yref="paper",
+             showarrow=False, font=dict(size=9, color="#aaaaaa"), xanchor="left"),
+    ]
+)
 fig.show()
 ```
