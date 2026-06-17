@@ -167,7 +167,7 @@ Image("../imagenes/trabajo/linkedin.png", width=800)
 
 Selecciona una o más regiones para comparar su evolución en el tiempo. Las diferencias regionales reflejan la heterogeneidad estructural del mercado laboral chileno — regiones mineras del norte tienden a tener menor desempleo, mientras que regiones del sur muestran mayor volatilidad estacional.
 
-```{python}
+
 # Identificar columnas de regiones
 ```{python}
 # Identificar columnas de regiones
