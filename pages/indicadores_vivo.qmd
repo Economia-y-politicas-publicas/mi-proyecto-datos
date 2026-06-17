@@ -59,11 +59,17 @@ def agregar_autor(fig):
 tco = obtener_serie("F073.TCO.PRE.Z.D", dias=365)
 ultimo_tco = tco["valor"].iloc[-1]
 fecha_tco = tco["fecha"].iloc[-1].strftime("%d/%m/%Y")
+ultima_actualizacion = datetime.today().strftime("%d/%m/%Y %H:%M")
 ```
 
 ::: {.callout-note}
-Los datos se actualizan automáticamente cada vez que se publica el sitio. Última actualización: `{python} datetime.today().strftime("%d/%m/%Y %H:%M")`
+Los datos se actualizan automáticamente cada vez que se publica el sitio.
 :::
+
+```{python}
+#| echo: false
+print(f"Última actualización: {ultima_actualizacion}")
+```
 
 ## Tipo de cambio USD/CLP
 
@@ -71,8 +77,6 @@ El **tipo de cambio observado** es el promedio ponderado de las operaciones de c
 
 ```{python}
 #| echo: false
-
-# Métrica resumen
 print(f"Último valor: ${ultimo_tco:,.2f} CLP/USD ({fecha_tco})")
 ```
 
