@@ -4,9 +4,12 @@
   resources:
     - googleef02c443fa87502b.html
 
+
 website:
   title: "Economía y Políticas Públicas"
   description: "Hub de información económica sobre Chile y el mundo"
+  open-graph: true
+  twitter-card: true
   navbar:
     background: dark
     foreground: light
