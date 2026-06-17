@@ -163,76 +163,60 @@ Image("../imagenes/trabajo/linkedin.png", width=800)
 ```
 
 ---
-# 1. Identificar las columnas de las regiones
-columnas_excluir = ['periodo', 'año', 'mes', 'total', 'hombre', 'mujer', 'Nacional', 'fecha', 'brecha']
+## 5. Desempleo por región
+
+Selecciona una o más regiones para comparar su evolución en el tiempo. Las diferencias regionales reflejan la heterogeneidad estructural del mercado laboral chileno — regiones mineras del norte tienden a tener menor desempleo, mientras que regiones del sur muestran mayor volatilidad estacional.
+
+```{python}
+# Identificar columnas de regiones
+columnas_excluir = ["periodo", "año", "mes", "total", "hombre", "mujer", "fecha", "brecha"]
 columnas_regiones = [col for col in dt.columns if col not in columnas_excluir]
 
-# 2. Limpiar los datos y asegurar que todas las columnas regionales sean numéricas
+# Asegurar que sean numéricas
 for col in columnas_regiones:
-    # Convertir a texto, cambiar posibles comas por puntos, borrar espacios y forzar a número
-    dt[col] = dt[col].astype(str).str.replace(',', '.').str.strip()
-    dt[col] = pd.to_numeric(dt[col], errors="coerce")
+    dt[col] = pd.to_numeric(
+        dt[col].astype(str).str.replace(",", ".").str.strip(),
+        errors="coerce"
+    )
+
+# Paleta de colores para distinguir regiones
+colores = [
+    "#e74c3c","#2980b9","#27ae60","#f39c12","#8e44ad",
+    "#16a085","#d35400","#2c3e50","#c0392b","#1abc9c",
+    "#e67e22","#3498db","#9b59b6","#2ecc71","#e74c3c","#f1c40f",
+]
 
 fig = go.Figure()
 
-# Los nombres de las regiones ya vienen limpios del CSV
-nombres_regiones = columnas_regiones
-
-# 3. Agregar una línea (trace) por cada región
 for i, col in enumerate(columnas_regiones):
     fig.add_trace(go.Scatter(
-        x=dt["fecha"], 
+        x=dt["fecha"],
         y=dt[col],
-        name=nombres_regiones[i],
-        visible=(i == 0), # Solo la primera región será visible al inicio
-        line=dict(color="#27ae60", width=2)
+        name=col,
+        visible=True if col == "Metropolitana" else "legendonly",
+        line=dict(color=colores[i % len(colores)], width=2),
+        hovertemplate=f"<b>{col}</b><br>%{{x|%b %Y}}<br>%{{y:.1f}}%<extra></extra>",
     ))
 
-# 4. Crear los botones del menú desplegable
-botones = []
-for i, nombre in enumerate(nombres_regiones):
-    visibilidad = [False] * len(columnas_regiones)
-    visibilidad[i] = True
-    
-    boton = dict(
-        label=nombre,
-        method="update",
-        args=[
-            {"visible": visibilidad},
-            {"title.text": f"Tasa de desempleo: {nombre} (%)"}
-        ]
-    )
-    botones.append(boton)
-
-# 5. Configurar el diseño y agregar el menú
-# Usamos un try/except por si la lista de nombres llega vacía para que no se caiga
-try:
-    titulo_inicial = f"Tasa de desempleo: {nombres_regiones[0]} (%)"
-except IndexError:
-    titulo_inicial = "Tasa de desempleo: Sin datos"
-
 fig.update_layout(
-    title=dict(text=titulo_inicial, font=dict(size=16)),
+    title=dict(text="Tasa de desempleo por región (%)", font=dict(size=16)),
     yaxis_title="Tasa de desempleo (%)",
     xaxis=eje_x,
     template="plotly_white",
     font_family="Inter",
     yaxis=dict(tickformat=".1f"),
-    margin=dict(b=120, t=100), 
+    margin=dict(b=120, t=80),
     height=500,
-    updatemenus=[dict(
-        active=0,
-        buttons=botones,
-        x=0.0,
+    legend=dict(
+        orientation="v",
+        x=1.02,
+        y=1,
         xanchor="left",
-        y=1.15,
-        yanchor="top",
-        direction="down",
-        showactive=True,
-        bgcolor="white",
-        bordercolor="gray"
-    )]
+        title="Regiones<br><i style='font-size:10px'>clic para mostrar/ocultar</i>",
+    ),
+    xaxis_rangeslider=dict(visible=True),
 )
 
 agregar_autor(fig)
 fig.show()
+```
