@@ -20,7 +20,7 @@ from datetime import datetime, timedelta
 usuario = os.environ.get("BCENTRAL_USER")
 password = os.environ.get("BCENTRAL_PASS")
 
-URL_API = "https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx"
+URL_API = "[https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx](https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx)"
 
 def obtener_serie(codigo, dias=365):
     hoy = datetime.today()
@@ -102,29 +102,34 @@ ipc   = obtener_serie("F074.IPC.IND.Z.EP09.C.M", dias=1095)
 tpm   = obtener_serie("F022.TPM.TIN.D001.NO.Z.M", dias=1095)
 utm   = obtener_serie("F073.UTR.PRE.Z.M", dias=1095)
 
-def tarjeta(nombre, df, prefijo="", sufijo="", formato=",.0f"):
+def tarjeta(nombre, df, prefijo="", sufijo="", formato=",.0f", url="#"):
     if df.empty:
-        return f'<div class="ind-card"><div class="ind-name">{nombre}</div><div class="ind-value">N/D</div></div>'
+        return f'<a href="{url}" target="_blank"><div class="ind-card"><div class="ind-name">{nombre}</div><div class="ind-value">N/D</div></div></a>'
     val = df["valor"].iloc[-1]
     fecha = df["fecha"].iloc[-1].strftime("%d/%m/%Y")
     var, color = variacion(df)
     flecha = "▲" if var >= 0 else "▼"
     return f"""
-<div class="ind-card">
-  <div class="ind-name">{nombre}</div>
-  <div class="ind-value">{prefijo}{val:{formato}}{sufijo}</div>
-  <div class="ind-var" style="color:{color}">{flecha} {abs(var):.2f}%</div>
-  <div class="ind-fecha">{fecha}</div>
-</div>"""
-```
+<a href="{url}" target="_blank">
+  <div class="ind-card">
+    <div class="ind-name">{nombre}</div>
+    <div class="ind-value">{prefijo}{val:{formato}}{sufijo}</div>
+    <div class="ind-var" style="color:{color}">{flecha} {abs(var):.2f}%</div>
+    <div class="ind-fecha">{fecha}</div>
+  </div>
+</a>"""
 
-```{=html}
 <style>
 .ind-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1rem;
   margin: 1.5rem 0 2rem;
+}
+.ind-grid a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 .ind-card {
   background: rgba(255,255,255,0.05);
@@ -161,108 +166,20 @@ def tarjeta(nombre, df, prefijo="", sufijo="", formato=",.0f"):
   margin-top: .3rem;
 }
 </style>
-```
 
-::: {.callout-note}
-Los datos se actualizan automáticamente de lunes a viernes desde la API del Banco Central de Chile.
-:::
 
-## Resumen
-
-```{python}
 #| echo: false
-from IPython.display import HTML
-
-html = '<div class="ind-grid">'
-html += tarjeta("Dólar USD", tco, prefijo="$", formato=",.0f")
-html += tarjeta("Euro", euro, prefijo="$", formato=",.0f")
-html += tarjeta("UF", uf, prefijo="$", formato=",.2f")
-html += tarjeta("IVP", ivp, prefijo="$", formato=",.2f")
-html += tarjeta("UTM", utm, prefijo="$", formato=",.0f")
-html += tarjeta("TPM", tpm, sufijo="%", formato=".2f")
-html += tarjeta("Cobre", cobre, sufijo=" ¢/lb", formato=".2f")
-html += tarjeta("Oro", oro, prefijo="$", sufijo=" oz", formato=",.2f")
-html += tarjeta("Plata", plata, prefijo="$", sufijo=" oz", formato=",.2f")
-html += '</div>'
-HTML(html)
-```
-
----
-
-## 💵 Tipos de Cambio
-
-Los tipos de cambio reflejan el valor relativo entre monedas. El **dólar observado** es el promedio ponderado de las operaciones del mercado cambiario formal publicado diariamente por el Banco Central.
-
-```{python}
 grafico_linea(tco, "Dólar observado USD/CLP", "CLP por USD",
               color="rgb(41,128,185)", formato_y=",.0f", prefijo="$").show()
-```
-
-```{python}
+              
+#| echo: false
 grafico_linea(euro, "Euro EUR/CLP", "CLP por EUR",
               color="rgb(52,152,219)", formato_y=",.0f", prefijo="$").show()
-```
-
----
-
-## 📊 Unidades de Reajuste
-
-La **UF (Unidad de Fomento)** y el **IVP (Índice de Valor Promedio)** son unidades de cuenta reajustables según la inflación, usadas en contratos hipotecarios, arriendos y otros instrumentos financieros.
-
-```{python}
+              
+#| echo: false
 grafico_linea(uf, "Unidad de Fomento (UF)", "Pesos chilenos",
               color="rgb(39,174,96)", formato_y=",.2f", prefijo="$").show()
-```
-
-```{python}
+              
+#| echo: false
 grafico_linea(ivp, "Índice de Valor Promedio (IVP)", "Pesos chilenos",
               color="rgb(46,204,113)", formato_y=",.2f", prefijo="$").show()
-```
-
----
-
-## 🪙 Materias Primas
-
-Chile es el mayor productor mundial de **cobre**, por lo que su precio tiene un impacto directo en los ingresos fiscales y el tipo de cambio. El oro y la plata son referencias internacionales de valor.
-
-```{python}
-grafico_linea(cobre, "Cobre (centavos de dólar por libra)", "USD centavos/libra",
-              color="rgb(211,84,0)", formato_y=".2f").show()
-```
-
-```{python}
-grafico_linea(oro, "Oro (dólares por onza troy)", "USD/onza troy",
-              color="rgb(243,156,18)", formato_y=",.2f", prefijo="$").show()
-```
-
-```{python}
-grafico_linea(plata, "Plata (dólares por onza troy)", "USD/onza troy",
-              color="rgb(149,165,166)", formato_y=",.2f", prefijo="$").show()
-```
-
----
-
-## 🏦 Tasas e Indicadores Monetarios
-
-La **Tasa de Política Monetaria (TPM)** es el principal instrumento del Banco Central para controlar la inflación. La **UTM** es una unidad tributaria usada para expresar multas y valores en el sistema tributario chileno.
-
-```{python}
-grafico_linea(tpm, "Tasa de Política Monetaria (TPM)", "Porcentaje (%)",
-              color="rgb(142,68,173)", formato_y=".2f", sufijo="%").show()
-```
-
-```{python}
-grafico_linea(utm, "Unidad Tributaria Mensual (UTM)", "Pesos chilenos",
-              color="rgb(52,73,94)", formato_y=",.0f", prefijo="$").show()
-```
-
----
-
-## 📈 Inflación
-
-El **IPC (Índice de Precios al Consumidor)** mide la variación mensual de los precios de una canasta representativa de bienes y servicios. Es el principal indicador de inflación en Chile.
-
-```{python}
-grafico_linea(ipc, "Variación anual IPC (%)", "Variación (%)",
-              color="rgb(231,76,60)", formato_y=".2f", sufijo="%").show()
-```
