@@ -12,7 +12,6 @@ import os
 import requests
 import pandas as pd
 import plotly.graph_objects as go
-import plotly.express as px
 from datetime import datetime, timedelta
 
 usuario = os.environ.get("BCENTRAL_USER")
@@ -33,15 +32,24 @@ def obtener_serie(codigo, dias=365):
         "lastdate": fin,
         "format": "json",
     }
-    r = requests.get(URL_API, params=params, timeout=10)
-    data = r.json()
-    obs = data["Series"]["Obs"]
-    df = pd.DataFrame(obs)
-    df["fecha"] = pd.to_datetime(df["indexDateString"], format="%d-%m-%Y")
-    df["valor"] = pd.to_numeric(df["value"], errors="coerce")
-    return df.dropna(subset=["valor"]).sort_values("fecha")
+    try:
+        r = requests.get(URL_API, params=params, timeout=10)
+        data = r.json()
+        obs = data["Series"]["Obs"]
+        df = pd.DataFrame(obs)
+        col_fecha = "indexDateString" if "indexDateString" in df.columns else df.columns[0]
+        col_valor = "value" if "value" in df.columns else df.columns[1]
+        df["fecha"] = pd.to_datetime(df[col_fecha], format="%d-%m-%Y", errors="coerce")
+        df["valor"] = pd.to_numeric(df[col_valor], errors="coerce")
+        return df.dropna(subset=["valor"]).sort_values("fecha").reset_index(drop=True)
+    except Exception as e:
+        print(f"Error cargando {codigo}: {e}")
+        return pd.DataFrame(columns=["fecha", "valor"])
 
 def grafico_linea(df, titulo, ytitle, color, formato_y=".2f", prefijo="", sufijo=""):
+    if df.empty:
+        print(f"Sin datos para: {titulo}")
+        return go.Figure()
     ultimo = df["valor"].iloc[-1]
     fecha = df["fecha"].iloc[-1].strftime("%d/%m/%Y")
     minimo = df["valor"].min()
@@ -82,23 +90,22 @@ def grafico_linea(df, titulo, ytitle, color, formato_y=".2f", prefijo="", sufijo
     )
     return fig
 
-# Cargar todas las series
 ultima_actualizacion = datetime.today().strftime("%d/%m/%Y %H:%M")
 
 tco   = obtener_serie("F073.TCO.PRE.Z.D")
 uf    = obtener_serie("F073.UFF.PRE.Z.D")
 ivp   = obtener_serie("F073.IVP.PRE.Z.D")
-euro = obtener_serie("F072.CLP.EUR.N.Z.D")
+euro  = obtener_serie("F072.CLP.EUR.N.Z.D")
 oro   = obtener_serie("F019.ORO.PRE.Z.D")
 plata = obtener_serie("F019.PLA.PRE.Z.D")
 cobre = obtener_serie("F019.COB.PRE.Z.D")
 ipc   = obtener_serie("F074.IPC.IPC.TBM.M", dias=1095)
 tpm   = obtener_serie("F022.BCH.INT.INF.M", dias=1095)
-utm   = obtener_serie("F073.UTM.PRE.Z.M",   dias=1095)
+utm   = obtener_serie("F073.UTM.PRE.Z.M", dias=1095)
 ```
 
 ::: {.callout-note}
-Los datos se actualizan automáticamente de lunes a viernes. Datos obtenidos desde la API del Banco Central de Chile.
+Los datos se actualizan automáticamente de lunes a viernes desde la API del Banco Central de Chile.
 :::
 
 ```{python}
