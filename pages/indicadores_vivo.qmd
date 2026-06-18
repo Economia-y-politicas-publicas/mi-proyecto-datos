@@ -96,12 +96,12 @@ tco   = obtener_serie("F073.TCO.PRE.Z.D")
 uf    = obtener_serie("F073.UFF.PRE.Z.D")
 ivp   = obtener_serie("F073.IVP.PRE.Z.D")
 euro  = obtener_serie("F072.CLP.EUR.N.O.D")
-oro   = obtener_serie("F019.ORO.PRE.Z.D")
-plata = obtener_serie("F019.PLA.PRE.Z.D")
+oro   = obtener_serie("F019.PPB.PRE.44B.M")
+plata = obtener_serie("F019.PPB.PRE.45B.M")
 cobre = obtener_serie("F019.PPB.PRE.40.M")
 ipc   = obtener_serie("F074.IPC.IND.Z.EP09.C.M", dias=1095)
 tpm   = obtener_serie("F022.TPM.TIN.D001.NO.Z.M", dias=1095)
-utm   = obtener_serie("F073.UTM.PRE.Z.M", dias=1095)
+utm   = obtener_serie("F073.UTR.PRE.Z.M", dias=1095)
 ```
 
 ::: {.callout-note}
