@@ -104,13 +104,13 @@ utm   = obtener_serie("F073.UTR.PRE.Z.M", dias=1095)
 
 def tarjeta(nombre, df, prefijo="", sufijo="", formato=",.0f", url="#"):
     if df.empty:
-        return f'<a href="{url}" target="_blank"><div class="ind-card"><div class="ind-name">{nombre}</div><div class="ind-value">N/D</div></div></a>'
+        return f'<a href="{url}"><div class="ind-card"><div class="ind-name">{nombre}</div><div class="ind-value">N/D</div></div></a>'
     val = df["valor"].iloc[-1]
     fecha = df["fecha"].iloc[-1].strftime("%d/%m/%Y")
     var, color = variacion(df)
     flecha = "▲" if var >= 0 else "▼"
     return f"""
-<a href="{url}" target="_blank">
+<a href="{url}">
   <div class="ind-card">
     <div class="ind-name">{nombre}</div>
     <div class="ind-value">{prefijo}{val:{formato}}{sufijo}</div>
@@ -120,12 +120,17 @@ def tarjeta(nombre, df, prefijo="", sufijo="", formato=",.0f", url="#"):
 </a>"""
 
 <style>
+/* Habilita el desplazamiento suave en la página */
+html {
+  scroll-behavior: smooth;
+}
 .ind-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 1rem;
   margin: 1.5rem 0 2rem;
 }
+/* Quita los estilos por defecto de los enlaces en las tarjetas */
 .ind-grid a {
   text-decoration: none;
   color: inherit;
@@ -138,6 +143,7 @@ def tarjeta(nombre, df, prefijo="", sufijo="", formato=",.0f", url="#"):
   padding: 1.2rem 1rem;
   text-align: center;
   transition: transform .15s ease, box-shadow .15s ease;
+  cursor: pointer;
 }
 .ind-card:hover {
   transform: translateY(-3px);
@@ -165,21 +171,25 @@ def tarjeta(nombre, df, prefijo="", sufijo="", formato=",.0f", url="#"):
   opacity: .45;
   margin-top: .3rem;
 }
+/* Margen superior para las anclas de los gráficos (evita que queden tapados por menús) */
+.chart-anchor {
+  scroll-margin-top: 40px;
+}
 </style>
 
+#| echo: false
+from IPython.display import HTML
 
-#| echo: false
-grafico_linea(tco, "Dólar observado USD/CLP", "CLP por USD",
-              color="rgb(41,128,185)", formato_y=",.0f", prefijo="$").show()
-              
-#| echo: false
-grafico_linea(euro, "Euro EUR/CLP", "CLP por EUR",
-              color="rgb(52,152,219)", formato_y=",.0f", prefijo="$").show()
-              
-#| echo: false
-grafico_linea(uf, "Unidad de Fomento (UF)", "Pesos chilenos",
-              color="rgb(39,174,96)", formato_y=",.2f", prefijo="$").show()
-              
-#| echo: false
-grafico_linea(ivp, "Índice de Valor Promedio (IVP)", "Pesos chilenos",
-              color="rgb(46,204,113)", formato_y=",.2f", prefijo="$").show()
+html = '<div class="ind-grid">'
+html += tarjeta("Dólar USD", tco, prefijo="$", formato=",.0f", url="#chart-dolar")
+html += tarjeta("Euro", euro, prefijo="$", formato=",.0f", url="#chart-euro")
+html += tarjeta("UF", uf, prefijo="$", formato=",.2f", url="#chart-uf")
+html += tarjeta("IVP", ivp, prefijo="$", formato=",.2f", url="#chart-ivp")
+html += tarjeta("UTM", utm, prefijo="$", formato=",.0f", url="#chart-utm")
+html += tarjeta("TPM", tpm, sufijo="%", formato=".2f", url="#chart-tpm")
+html += tarjeta("Cobre", cobre, sufijo=" ¢/lb", formato=".2f", url="#chart-cobre")
+html += tarjeta("Oro", oro, prefijo="$", sufijo=" oz", formato=",.2f", url="#chart-oro")
+html += tarjeta("Plata", plata, prefijo="$", sufijo=" oz", formato=",.2f", url="#chart-plata")
+html += '</div>'
+HTML(html)
+
