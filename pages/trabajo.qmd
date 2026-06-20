@@ -52,6 +52,100 @@ eje_x = dict(
 )
 ```
 
+
+
+```{python}
+def obtener_serie(codigo, dias=365):
+    hoy = datetime.today()
+    inicio = (hoy - timedelta(days=dias)).strftime("%Y-%m-%d")
+    fin = hoy.strftime("%Y-%m-%d")
+    params = {
+        "user": usuario,
+        "pass": password,
+        "function": "GetSeries",
+        "timeseries": codigo,
+        "firstdate": inicio,
+        "lastdate": fin,
+        "format": "json",
+    }
+    try:
+        r = requests.get(URL_API, params=params, timeout=10)
+        data = r.json()
+        obs = data["Series"]["Obs"]
+        df = pd.DataFrame(obs)
+        col_fecha = "indexDateString" if "indexDateString" in df.columns else df.columns[0]
+        col_valor = "value" if "value" in df.columns else df.columns[1]
+        df["fecha"] = pd.to_datetime(df[col_fecha], format="%d-%m-%Y", errors="coerce")
+        df["valor"] = pd.to_numeric(df[col_valor], errors="coerce")
+        return df.dropna(subset=["valor"]).sort_values("fecha").reset_index(drop=True)
+    except Exception as e:
+        print(f"Error cargando {codigo}: {e}")
+        return pd.DataFrame(columns=["fecha", "valor"])
+
+def grafico_linea(df, titulo, ytitle, color, formato_y=".2f", prefijo="", sufijo=""):
+    if df.empty:
+        return go.Figure()
+    ultimo = df["valor"].iloc[-1]
+    fecha = df["fecha"].iloc[-1].strftime("%d/%m/%Y")
+    minimo = df["valor"].min()
+    maximo = df["valor"].max()
+    margen = (maximo - minimo) * 0.05
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(
+        x=df["fecha"], y=df["valor"],
+        mode="lines",
+        line=dict(color=color, width=2),
+        fill="tozeroy",
+        fillcolor=color.replace(")", ",0.1)").replace("rgb", "rgba"),
+        hovertemplate=f"<b>%{{x|%d %b %Y}}</b><br>{prefijo}%{{y:{formato_y}}}{sufijo}<extra></extra>",
+    ))
+    fig.update_layout(
+        title=dict(text=f"{titulo} — Último: {prefijo}{ultimo:{formato_y}}{sufijo} ({fecha})", font=dict(size=15)),
+        yaxis=dict(title=ytitle, tickformat=formato_y, tickprefix=prefijo, ticksuffix=sufijo, range=[minimo - margen, maximo + margen]),
+        xaxis=dict(dtick="M1", tickformat="%b %Y", tickangle=45, tickfont=dict(size=10)),
+        template="plotly_white",
+        font_family="Inter",
+        height=380,
+        margin=dict(b=100, t=60),
+        annotations=[dict(
+            text="Autor: Juan Miguieles Onetto | Fuente: Banco Central de Chile",
+            x=0, y=-0.3, xref="paper", yref="paper",
+            showarrow=False, font=dict(size=9, color="gray"), xanchor="left",
+        )],
+    )
+    return fig
+
+def variacion(df):
+    if len(df) < 2:
+        return 0, "gray"
+    v = ((df["valor"].iloc[-1] - df["valor"].iloc[-2]) / df["valor"].iloc[-2]) * 100
+    color = "#2ecc71" if v >= 0 else "#e74c3c"
+    return v, color
+
+ultima_actualizacion = datetime.today().strftime("%d/%m/%Y %H:%M")
+
+pob15mas   = obtener_serie("F049.POB.PMT.INE9.01.M")
+ftt    = obtener_serie("F049.FTR.PMT.INE9.01.M")
+ocupados   = obtener_serie("F049.OCU.PMT.INE9.01.M")
+desocupados  = obtener_serie("F049.DES.PMT.INE9.01.M")
+cesantes   = obtener_serie("F049.CES.PMT.INE9.01.M")
+btpv = obtener_serie("F049.BPV.PMT.INE9.01.M")
+inactivos = obtener_serie("F049.INC.PMT.INE9.01.M")
+
+##
+# F049.POB.PMT.INE9.01.M	Población de 15 años y más 
+# F049.FTR.PMT.INE9.01.M	Fuerza de trabajo  Total 
+# F049.OCU.PMT.INE9.01.M	Ocupados 
+# F049.DES.PMT.INE9.01.M	Desocupados 
+# F049.CES.PMT.INE9.01.M	Cesantes 
+# F049.BPV.PMT.INE9.01.M	Buscan trabajo por primera vez 
+# F049.INC.PMT.INE9.01.M	Inactivos
+```
+
+
+
+
+
 ---
 
 ## 1. Tasa de desempleo total
@@ -258,4 +352,32 @@ fig.update_layout(
     ]
 )
 fig.show()
+```
+
+---
+## 6. Fuerza de trabajo nacional e inactivos, INE (promedios móviles trimestrales, miles de personas) 
+
+
+```{python}
+grafico_linea(pob15mas, "Población de 15 años y más", "miles",
+              color="rgb(20, 53, 85)", formato_y=",.1f").show()
+
+
+```
+
+pob15mas   = obtener_serie("F049.POB.PMT.INE9.01.M")
+ftt    = obtener_serie("F049.FTR.PMT.INE9.01.M")
+ocupados   = obtener_serie("F049.OCU.PMT.INE9.01.M")
+desocupados  = obtener_serie("F049.DES.PMT.INE9.01.M")
+cesantes   = obtener_serie("F049.CES.PMT.INE9.01.M")
+btpv = obtener_serie("F049.BPV.PMT.INE9.01.M")
+inactivos = obtener_serie("F049.INC.PMT.INE9.01.M")
+
+# F049.POB.PMT.INE9.01.M	Población de 15 años y más 
+# F049.FTR.PMT.INE9.01.M	Fuerza de trabajo  Total 
+# F049.OCU.PMT.INE9.01.M	Ocupados 
+# F049.DES.PMT.INE9.01.M	Desocupados 
+# F049.CES.PMT.INE9.01.M	Cesantes 
+# F049.BPV.PMT.INE9.01.M	Buscan trabajo por primera vez 
+# F049.INC.PMT.INE9.01.M	Inactivos
 ```

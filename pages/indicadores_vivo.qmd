@@ -213,7 +213,9 @@ grafico_linea(euro, "Euro EUR/CLP", "CLP por EUR",
 
 La **UF (Unidad de Fomento)** y el **IVP (Índice de Valor Promedio)** son unidades de cuenta reajustables según la inflación, usadas en contratos hipotecarios, arriendos y otros instrumentos financieros.
 
+
 La Unidad de Fomento (UF) es un índice de reajustabilidad, calculado y autorizado por el Banco Central de Chile (Banco), para las operaciones de crédito de dinero en moneda nacional que efectúen las empresas bancarias y las cooperativas de ahorro y crédito. Para fines del cálculo de este índice, el valor de la UF se reajusta a partir del día diez de cada mes y hasta el día nueve del mes siguiente, en forma diaria, de acuerdo a la variación experimentada por el Índice de Precios al Consumidor (IPC) que determina el Instituto Nacional de Estadísticas (INE) o el organismo que lo reemplace en el mes calendario inmediatamente anterior al período para el cual la UF se calcula y publica. 
+
 
 ```{python}
 grafico_linea(uf, "Unidad de Fomento (UF)", "Pesos chilenos",
@@ -222,6 +224,7 @@ grafico_linea(uf, "Unidad de Fomento (UF)", "Pesos chilenos",
 
 
 El Índice de Valor Promedio (IVP) es un índice de reajustabilidad, calculado y autorizado por el Banco Central de Chile (Banco), para las operaciones de crédito de dinero en moneda nacional que efectúen las empresas bancarias y las cooperativas de ahorro y crédito. Para fines del cálculo de este índice, el valor del IVP se reajusta a partir del día diez de cada mes y hasta el día nueve del mes siguiente, en forma diaria, de acuerdo a la variación experimentada por el Índice de Precios al Consumidor (IPC) que determina el Instituto Nacional de Estadísticas (INE) o el organismo que lo reemplace en variación semestral móvil inmediatamente anterior al período para el cual el IVP se calcula y publica. 
+
 
 
 ```{python}
