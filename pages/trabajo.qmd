@@ -88,7 +88,7 @@ def grafico_linea(df, titulo, ytitle, color, formato_y=".2f", prefijo="", sufijo
         annotations=[dict(
             text="Autor: Juan Miguieles Onetto | Fuente: INE / Banco Central de Chile",
             x=0, y=-0.3, xref="paper", yref="paper",
-            showarrow=False, font=dict(size=9, color="gray"), xanchor="left",
+            showarrow=False, font=dict(size=10, color="gray"), xanchor="left",
         )],
     )
     return fig
@@ -323,3 +323,108 @@ grafico_linea(ocupados, "Ocupados", "Miles de personas",
 grafico_linea(desocupados, "Desocupados", "Miles de personas",
               color="rgb(231,76,60)", formato_y=",.1f").show()
 ```
+
+
+# ── Índice de Vacantes de Trabajo (IVT) ──────────────────────────────
+
+series_vacantes = {
+    "Antofagasta": "F049.VTR.IND.BCC1.61.M",
+    "Valparaíso":  "F049.VTR.IND.BCC1.62.M",
+    "Concepción":  "F049.VTR.IND.BCC1.63.M",
+    "Temuco":      "F049.VTR.IND.BCC1.64.M",
+    "Santiago":    "F049.VTR.IND.BCC1.65.M",
+    "Total":       "F049.VTR.IND.BCC1.01.M",
+    "Total ponderado": "F049.VTR.IND.BCC1.66.M",
+}
+
+vacantes = {}
+
+for nombre, codigo in series_vacantes.items():
+    df_tmp = obtener_serie(codigo, dias=3650)  # ~10 años
+    if not df_tmp.empty:
+        vacantes[nombre] = df_tmp
+
+fig = go.Figure()
+
+colores = {
+    "Antofagasta": "#e74c3c",
+    "Valparaíso": "#3498db",
+    "Concepción": "#27ae60",
+    "Temuco": "#8e44ad",
+    "Santiago": "#f39c12",
+    "Total": "#2c3e50",
+    "Total ponderado": "#d35400",
+}
+
+for nombre, df_tmp in vacantes.items():
+
+    ancho = 4 if nombre in ["Total", "Total ponderado"] else 2
+
+    fig.add_trace(
+        go.Scatter(
+            x=df_tmp["fecha"],
+            y=df_tmp["valor"],
+            mode="lines",
+            name=nombre,
+            line=dict(
+                color=colores.get(nombre, None),
+                width=ancho
+            ),
+            hovertemplate=(
+                f"<b>{nombre}</b><br>"
+                "%{x|%b %Y}<br>"
+                "Índice: %{y:.1f}"
+                "<extra></extra>"
+            )
+        )
+    )
+
+fig.update_layout(
+    title=dict(
+        text="Índice de Vacantes de Trabajo (promedio 1995 = 100)",
+        font=dict(size=16)
+    ),
+    yaxis_title="Índice (1995=100)",
+    xaxis=eje_x,
+    template="plotly_white",
+    font_family="Inter",
+    height=550,
+    margin=dict(b=140, t=80),
+
+    legend=dict(
+        orientation="h",
+        y=-0.25,
+        x=0.5,
+        xanchor="center"
+    ),
+
+    xaxis_rangeslider=dict(
+        visible=True,
+        thickness=0.05
+    ),
+
+    annotations=[
+        dict(
+            text="Autor: Juan Miguieles Onetto | Fuente: Banco Central de Chile",
+            x=0,
+            y=-0.35,
+            xref="paper",
+            yref="paper",
+            showarrow=False,
+            font=dict(size=10, color="gray"),
+            xanchor="left"
+        ),
+        dict(
+            text="Nota: Índice base promedio 1995 = 100. Un mayor valor indica una mayor cantidad relativa de vacantes laborales publicadas.",
+            x=0,
+            y=-0.43,
+            xref="paper",
+            yref="paper",
+            showarrow=False,
+            font=dict(size=9, color="#aaaaaa"),
+            xanchor="left"
+        )
+    ]
+)
+
+fig.show()
