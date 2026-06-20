@@ -12,12 +12,14 @@ El mercado laboral es uno de los indicadores más importantes del bienestar econ
 #| label: setup
 #| include: false
 
+import os
+import requests
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+from datetime import datetime, timedelta
 
-# En lugar de la URL, pon la ruta de tu archivo:
-# Esta ruta funciona en tu PC y en el servidor de GitHub
+# ── Datos CSV (tasa de desempleo) ─────────────────────────────────────────────
 dt = pd.read_csv("../data/trabajo.csv", sep=",", encoding="utf-8")
 dt = dt.rename(columns={
     "Tiempo": "periodo", "Año": "año", "Mes": "mes",
@@ -30,49 +32,25 @@ dt["fecha"] = pd.to_datetime(dict(year=dt["año"], month=dt["mes"], day=1))
 dt = dt.sort_values("fecha").reset_index(drop=True)
 dt["brecha"] = dt["mujer"] - dt["hombre"]
 
-AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
-NOTA = "Nota: La tasa de desempleo se mide trimestralmente mediante la ENE."
+# ── API Banco Central (fuerza de trabajo) ──────────────────────────────────────
+usuario  = os.environ.get("BCENTRAL_USER")
+password = os.environ.get("BCENTRAL_PASS")
+URL_API  = "https://si3.bcentral.cl/SieteRestWS/SieteRestWS.ashx"
 
-def agregar_autor(fig):
-    fig.update_layout(
-        annotations=[
-            dict(text=AUTOR, x=0, y=-0.18, xref="paper", yref="paper",
-                 showarrow=False, font=dict(size=10, color="gray"), xanchor="left"),
-            dict(text=NOTA, x=0, y=-0.24, xref="paper", yref="paper",
-                 showarrow=False, font=dict(size=9, color="#aaaaaa"), xanchor="left"),
-        ]
-    )
-    return fig
-
-eje_x = dict(
-    dtick="M6",
-    tickformat="%b %Y",
-    tickangle=45,
-    tickfont=dict(size=10),
-)
-```
-
-
-
-```{python}
-def obtener_serie(codigo, dias=365):
-    hoy = datetime.today()
+def obtener_serie(codigo, dias=1095):
+    hoy    = datetime.today()
     inicio = (hoy - timedelta(days=dias)).strftime("%Y-%m-%d")
-    fin = hoy.strftime("%Y-%m-%d")
+    fin    = hoy.strftime("%Y-%m-%d")
     params = {
-        "user": usuario,
-        "pass": password,
-        "function": "GetSeries",
-        "timeseries": codigo,
-        "firstdate": inicio,
-        "lastdate": fin,
-        "format": "json",
+        "user": usuario, "pass": password,
+        "function": "GetSeries", "timeseries": codigo,
+        "firstdate": inicio, "lastdate": fin, "format": "json",
     }
     try:
-        r = requests.get(URL_API, params=params, timeout=10)
+        r   = requests.get(URL_API, params=params, timeout=10)
         data = r.json()
-        obs = data["Series"]["Obs"]
-        df = pd.DataFrame(obs)
+        obs  = data["Series"]["Obs"]
+        df   = pd.DataFrame(obs)
         col_fecha = "indexDateString" if "indexDateString" in df.columns else df.columns[0]
         col_valor = "value" if "value" in df.columns else df.columns[1]
         df["fecha"] = pd.to_datetime(df[col_fecha], format="%d-%m-%Y", errors="coerce")
@@ -86,7 +64,7 @@ def grafico_linea(df, titulo, ytitle, color, formato_y=".2f", prefijo="", sufijo
     if df.empty:
         return go.Figure()
     ultimo = df["valor"].iloc[-1]
-    fecha = df["fecha"].iloc[-1].strftime("%d/%m/%Y")
+    fecha  = df["fecha"].iloc[-1].strftime("%d/%m/%Y")
     minimo = df["valor"].min()
     maximo = df["valor"].max()
     margen = (maximo - minimo) * 0.05
@@ -102,49 +80,44 @@ def grafico_linea(df, titulo, ytitle, color, formato_y=".2f", prefijo="", sufijo
     fig.update_layout(
         title=dict(text=f"{titulo} — Último: {prefijo}{ultimo:{formato_y}}{sufijo} ({fecha})", font=dict(size=15)),
         yaxis=dict(title=ytitle, tickformat=formato_y, tickprefix=prefijo, ticksuffix=sufijo, range=[minimo - margen, maximo + margen]),
-        xaxis=dict(dtick="M1", tickformat="%b %Y", tickangle=45, tickfont=dict(size=10)),
+        xaxis=dict(dtick="M6", tickformat="%b %Y", tickangle=45, tickfont=dict(size=10)),
         template="plotly_white",
         font_family="Inter",
-        height=380,
+        height=400,
         margin=dict(b=100, t=60),
         annotations=[dict(
-            text="Autor: Juan Miguieles Onetto | Fuente: Banco Central de Chile",
+            text="Autor: Juan Miguieles Onetto | Fuente: INE / Banco Central de Chile",
             x=0, y=-0.3, xref="paper", yref="paper",
             showarrow=False, font=dict(size=9, color="gray"), xanchor="left",
         )],
     )
     return fig
 
-def variacion(df):
-    if len(df) < 2:
-        return 0, "gray"
-    v = ((df["valor"].iloc[-1] - df["valor"].iloc[-2]) / df["valor"].iloc[-2]) * 100
-    color = "#2ecc71" if v >= 0 else "#e74c3c"
-    return v, color
+# Cargar series API
+pob15mas    = obtener_serie("F049.POB.PMT.INE9.01.M")
+ftt         = obtener_serie("F049.FTR.PMT.INE9.01.M")
+ocupados    = obtener_serie("F049.OCU.PMT.INE9.01.M")
+desocupados = obtener_serie("F049.DES.PMT.INE9.01.M")
+cesantes    = obtener_serie("F049.CES.PMT.INE9.01.M")
+btpv        = obtener_serie("F049.BPV.PMT.INE9.01.M")
+inactivos   = obtener_serie("F049.INC.PMT.INE9.01.M")
 
-ultima_actualizacion = datetime.today().strftime("%d/%m/%Y %H:%M")
+AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
+NOTA  = "Nota: La tasa de desempleo se mide trimestralmente mediante la ENE."
 
-pob15mas   = obtener_serie("F049.POB.PMT.INE9.01.M")
-ftt    = obtener_serie("F049.FTR.PMT.INE9.01.M")
-ocupados   = obtener_serie("F049.OCU.PMT.INE9.01.M")
-desocupados  = obtener_serie("F049.DES.PMT.INE9.01.M")
-cesantes   = obtener_serie("F049.CES.PMT.INE9.01.M")
-btpv = obtener_serie("F049.BPV.PMT.INE9.01.M")
-inactivos = obtener_serie("F049.INC.PMT.INE9.01.M")
+def agregar_autor(fig):
+    fig.update_layout(
+        annotations=[
+            dict(text=AUTOR, x=0, y=-0.18, xref="paper", yref="paper",
+                 showarrow=False, font=dict(size=10, color="gray"), xanchor="left"),
+            dict(text=NOTA,  x=0, y=-0.24, xref="paper", yref="paper",
+                 showarrow=False, font=dict(size=9, color="#aaaaaa"), xanchor="left"),
+        ]
+    )
+    return fig
 
-##
-# F049.POB.PMT.INE9.01.M	Población de 15 años y más 
-# F049.FTR.PMT.INE9.01.M	Fuerza de trabajo  Total 
-# F049.OCU.PMT.INE9.01.M	Ocupados 
-# F049.DES.PMT.INE9.01.M	Desocupados 
-# F049.CES.PMT.INE9.01.M	Cesantes 
-# F049.BPV.PMT.INE9.01.M	Buscan trabajo por primera vez 
-# F049.INC.PMT.INE9.01.M	Inactivos
+eje_x = dict(dtick="M6", tickformat="%b %Y", tickangle=45, tickfont=dict(size=10))
 ```
-
-
-
-
 
 ---
 
@@ -185,18 +158,9 @@ Durante la pandemia de 2020, el desempleo masculino superó al femenino temporal
 
 ```{python}
 fig = go.Figure()
-fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["total"],
-    name="Total", line=dict(color="#f39c12", width=2),
-))
-fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["hombre"],
-    name="Hombre", line=dict(color="#2980b9", width=2),
-))
-fig.add_trace(go.Scatter(
-    x=dt["fecha"], y=dt["mujer"],
-    name="Mujer", line=dict(color="#e74c3c", width=2),
-))
+fig.add_trace(go.Scatter(x=dt["fecha"], y=dt["total"],  name="Total",  line=dict(color="#f39c12", width=2)))
+fig.add_trace(go.Scatter(x=dt["fecha"], y=dt["hombre"], name="Hombre", line=dict(color="#2980b9", width=2)))
+fig.add_trace(go.Scatter(x=dt["fecha"], y=dt["mujer"],  name="Mujer",  line=dict(color="#e74c3c", width=2)))
 fig.update_layout(
     title=dict(text="Tasa de desempleo por sexo (%)", font=dict(size=16)),
     yaxis_title="Tasa de desempleo (%)",
@@ -219,8 +183,6 @@ fig.show()
 La **brecha de desempleo** se define como la diferencia en puntos porcentuales entre la tasa de desempleo femenina y masculina:
 
 $$\text{Brecha} = TD_{\text{Mujer}} - TD_{\text{Hombre}}$$
-
-Cuando la brecha es positiva, las mujeres enfrentan mayor desempleo que los hombres. Una brecha persistentemente positiva es señal de desigualdad estructural en el mercado laboral. Durante 2020-2021, la brecha se redujo e incluso se volvió negativa momentáneamente, debido al impacto diferenciado de la pandemia por sector económico.
 
 ```{python}
 fig = px.area(
@@ -246,9 +208,7 @@ fig.show()
 
 ## 4. Duración promedio del desempleo
 
-La **duración promedio del desempleo** mide cuántos meses tarda en promedio una persona desempleada en encontrar trabajo. Es un indicador complementario a la tasa de desempleo: una economía puede tener baja tasa de desempleo pero alta duración, lo que indica dificultades estructurales de reinserción laboral.
-
-El peak de 2021 refleja el efecto prolongado de la pandemia: muchas personas permanecieron desempleadas por más tiempo incluso cuando la tasa global comenzaba a bajar.
+La **duración promedio del desempleo** mide cuántos meses tarda en promedio una persona desempleada en encontrar trabajo.
 
 ```{python}
 #| echo: false
@@ -257,25 +217,16 @@ Image("../imagenes/trabajo/linkedin.png", width=800)
 ```
 
 ---
+
 ## 5. Desempleo por región
 
-Selecciona una o más regiones para comparar su evolución en el tiempo. Las diferencias regionales reflejan la heterogeneidad estructural del mercado laboral chileno — regiones mineras del norte tienden a tener menor desempleo, mientras que regiones del sur muestran mayor volatilidad estacional.
-
-
-
 ```{python}
-# Identificar columnas de regiones
 columnas_excluir = ["periodo", "año", "mes", "total", "hombre", "mujer", "fecha", "brecha"]
 columnas_regiones = [col for col in dt.columns if col not in columnas_excluir]
 
-# Asegurar que sean numéricas
 for col in columnas_regiones:
-    dt[col] = pd.to_numeric(
-        dt[col].astype(str).str.replace(",", ".").str.strip(),
-        errors="coerce"
-    )
+    dt[col] = pd.to_numeric(dt[col].astype(str).str.replace(",", ".").str.strip(), errors="coerce")
 
-# Paleta de colores de alto contraste
 colores = [
     "#e74c3c","#2980b9","#27ae60","#f39c12","#8e44ad",
     "#16a085","#d35400","#2c3e50","#c0392b","#1abc9c",
@@ -283,12 +234,9 @@ colores = [
 ]
 
 fig = go.Figure()
-
 for i, col in enumerate(columnas_regiones):
     fig.add_trace(go.Scatter(
-        x=dt["fecha"],
-        y=dt[col],
-        name=col,
+        x=dt["fecha"], y=dt[col], name=col,
         visible=True if col == "Metropolitana" else "legendonly",
         line=dict(color=colores[i % len(colores)], width=3),
         hovertemplate=f"<b>{col}</b><br>%{{x|%b %Y}}<br>%{{y:.1f}}%<extra></extra>",
@@ -303,47 +251,21 @@ fig.update_layout(
     yaxis=dict(tickformat=".1f"),
     margin=dict(b=160, t=80),
     height=520,
-    legend=dict(
-        orientation="v",
-        x=1.02,
-        y=1,
-        xanchor="left",
-        title="Regiones<br><i style='font-size:10px'>clic para mostrar/ocultar</i>",
-        bgcolor="rgba(255,255,255,0.9)",
-        bordercolor="lightgray",
-        borderwidth=1,
-    ),
-    xaxis_rangeslider=dict(
-    visible=True,
-    thickness=0.05,),  # más delgado (default es 0.15) 
-    # Botón para limpiar el gráfico
+    legend=dict(orientation="v", x=1.02, y=1, xanchor="left",
+                title="Regiones<br><i style='font-size:10px'>clic para mostrar/ocultar</i>",
+                bgcolor="rgba(255,255,255,0.9)", bordercolor="lightgray", borderwidth=1),
+    xaxis_rangeslider=dict(visible=True, thickness=0.05),
     updatemenus=[dict(
-        type="buttons",
-        showactive=False,
-        x=1.0,
-        y=-0.55,
-        xanchor="right",
-        yanchor="top",
+        type="buttons", showactive=False,
+        x=1.0, y=-0.55, xanchor="right", yanchor="top",
         buttons=[
-            dict(
-                label="🗑 Limpiar selección",
-                method="restyle",
-                args=["visible", ["legendonly"] * len(columnas_regiones)],
-            ),
-            dict(
-                label="✅ Mostrar todas",
-                method="restyle",
-                args=["visible", [True] * len(columnas_regiones)],
-            ),
+            dict(label="🗑 Limpiar selección", method="restyle",
+                 args=["visible", ["legendonly"] * len(columnas_regiones)]),
+            dict(label="✅ Mostrar todas", method="restyle",
+                 args=["visible", [True] * len(columnas_regiones)]),
         ],
-        bgcolor="white",
-        bordercolor="gray",
-        font=dict(size=12),
+        bgcolor="white", bordercolor="gray", font=dict(size=12),
     )],
-)
-
-# Notas más abajo
-fig.update_layout(
     annotations=[
         dict(text=AUTOR, x=0, y=-0.7, xref="paper", yref="paper",
              showarrow=False, font=dict(size=10, color="gray"), xanchor="left"),
@@ -355,29 +277,32 @@ fig.show()
 ```
 
 ---
-## 6. Fuerza de trabajo nacional e inactivos, INE (promedios móviles trimestrales, miles de personas) 
 
+## 6. Fuerza de trabajo nacional e inactivos
+
+Promedios móviles trimestrales, miles de personas. Fuente: INE / Banco Central de Chile.
 
 ```{python}
-grafico_linea(pob15mas, "Población de 15 años y más", "miles",
-              color="rgb(20, 53, 85)", formato_y=",.1f").show()
-
-
+grafico_linea(pob15mas, "Población de 15 años y más", "Miles de personas",
+              color="rgb(20,53,85)", formato_y=",.1f").show()
 ```
 
-pob15mas   = obtener_serie("F049.POB.PMT.INE9.01.M")
-ftt    = obtener_serie("F049.FTR.PMT.INE9.01.M")
-ocupados   = obtener_serie("F049.OCU.PMT.INE9.01.M")
-desocupados  = obtener_serie("F049.DES.PMT.INE9.01.M")
-cesantes   = obtener_serie("F049.CES.PMT.INE9.01.M")
-btpv = obtener_serie("F049.BPV.PMT.INE9.01.M")
-inactivos = obtener_serie("F049.INC.PMT.INE9.01.M")
+```{python}
+grafico_linea(ftt, "Fuerza de trabajo total", "Miles de personas",
+              color="rgb(41,128,185)", formato_y=",.1f").show()
+```
 
-# F049.POB.PMT.INE9.01.M	Población de 15 años y más 
-# F049.FTR.PMT.INE9.01.M	Fuerza de trabajo  Total 
-# F049.OCU.PMT.INE9.01.M	Ocupados 
-# F049.DES.PMT.INE9.01.M	Desocupados 
-# F049.CES.PMT.INE9.01.M	Cesantes 
-# F049.BPV.PMT.INE9.01.M	Buscan trabajo por primera vez 
-# F049.INC.PMT.INE9.01.M	Inactivos
+```{python}
+grafico_linea(ocupados, "Ocupados", "Miles de personas",
+              color="rgb(39,174,96)", formato_y=",.1f").show()
+```
+
+```{python}
+grafico_linea(desocupados, "Desocupados", "Miles de personas",
+              color="rgb(231,76,60)", formato_y=",.1f").show()
+```
+
+```{python}
+grafico_linea(inactivos, "Inactivos", "Miles de personas",
+              color="rgb(142,68,173)", formato_y=",.1f").show()
 ```
