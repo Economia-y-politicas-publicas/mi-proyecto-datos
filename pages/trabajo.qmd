@@ -102,6 +102,20 @@ cesantes    = obtener_serie("F049.CES.PMT.INE9.01.M")
 btpv        = obtener_serie("F049.BPV.PMT.INE9.01.M")
 inactivos   = obtener_serie("F049.INC.PMT.INE9.01.M")
 
+
+ivtantofagasta    = obtener_serie("F049.VTR.IND.BCC1.61.M")
+ivtvalpo         = obtener_serie("F049.VTR.IND.BCC1.62.M")
+ivtconce    = obtener_serie("F049.VTR.IND.BCC1.63.M")
+ivttemuco = obtener_serie("F049.VTR.IND.BCC1.64.M")
+ivtsantiago   = obtener_serie("F049.VTR.IND.BCC1.65.M")
+ivttotal       = obtener_serie("F049.VTR.IND.BCC1.01.M")
+ivttotalponderado   = obtener_serie("F049.VTR.IND.BCC1.66.M")
+
+
+
+
+
+
 AUTOR = "Autor: Juan Miguieles Onetto | Fuente: INE"
 NOTA  = "Nota: La tasa de desempleo se mide trimestralmente mediante la ENE."
 
@@ -325,8 +339,8 @@ grafico_linea(desocupados, "Desocupados", "Miles de personas",
 ```
 
 
-# ── Índice de Vacantes de Trabajo (IVT) ──────────────────────────────
-
+# ── 7 Índice de Vacantes de Trabajo (IVT) ──────────────────────────────
+```{python}
 series_vacantes = {
     "Antofagasta": "F049.VTR.IND.BCC1.61.M",
     "Valparaíso":  "F049.VTR.IND.BCC1.62.M",
@@ -428,3 +442,4 @@ fig.update_layout(
 )
 
 fig.show()
+```
