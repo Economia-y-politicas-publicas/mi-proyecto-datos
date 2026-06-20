@@ -283,9 +283,19 @@ fig.show()
 Promedios móviles trimestrales, miles de personas. Fuente: INE / Banco Central de Chile.
 
 ```{python}
+#| echo: false
+from IPython.display import Image
+Image("../imagenes/trabajo/trabajo.png", width=800)
+```
+
+La población de 15 años y más corresponde a la fuerza de trabajo más los inactivos.
+
+```{python}
 grafico_linea(pob15mas, "Población de 15 años y más", "Miles de personas",
               color="rgb(20,53,85)", formato_y=",.1f").show()
 ```
+
+La fuerza de trabajo corresponde a la suma de los ocupados y desocupados.
 
 ```{python}
 grafico_linea(ftt, "Fuerza de trabajo total", "Miles de personas",
