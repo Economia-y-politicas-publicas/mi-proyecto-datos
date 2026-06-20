@@ -180,12 +180,13 @@ html = '<div class="ind-grid">'
 html += tarjeta("Dólar USD", tco, prefijo="$", formato=",.0f")
 html += tarjeta("Euro", euro, prefijo="$", formato=",.0f")
 html += tarjeta("UF", uf, prefijo="$", formato=",.2f")
-html += tarjeta("IVP", ivp, prefijo="$", formato=",.2f")
 html += tarjeta("UTM", utm, prefijo="$", formato=",.0f")
-html += tarjeta("TPM", tpm, sufijo="%", formato=".2f")
+html += tarjeta("TPM", tpm, sufijo="%", formato=".1f")
 html += tarjeta("Cobre", cobre, sufijo=" ¢/lb", formato=".2f")
 html += tarjeta("Oro", oro, prefijo="$", sufijo=" oz", formato=",.2f")
 html += tarjeta("Plata", plata, prefijo="$", sufijo=" oz", formato=",.2f")
+html += tarjeta("Litio", litio, prefijo="$", sufijo=" oz", formato=",.2f")
+html += tarjeta("Petroleo", petroleo, prefijo="$", sufijo=" oz", formato=",.2f")
 html += '</div>'
 HTML(html)
 ```
