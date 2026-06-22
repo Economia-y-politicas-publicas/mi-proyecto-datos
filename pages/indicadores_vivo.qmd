@@ -79,6 +79,31 @@ def grafico_linea(df, titulo, ytitle, color, formato_y=".2f", prefijo="", sufijo
             x=0, y=-0.3, xref="paper", yref="paper",
             showarrow=False, font=dict(size=9, color="gray"), xanchor="left",
         )],
+        # ── Botones de eje ──────────────────────────────────────────
+        updatemenus=[dict(
+            type="buttons",
+            direction="right",
+            x=1, y=1.15, xanchor="right", yanchor="top",
+            buttons=[
+                dict(
+                    label="Eje ajustado",
+                    method="relayout",
+                    args=[{"yaxis.range": [minimo - margen, maximo + margen],
+                           "yaxis.autorange": False}],
+                ),
+                dict(
+                    label="Eje desde 0",
+                    method="relayout",
+                    args=[{"yaxis.range": [0, maximo + margen],
+                           "yaxis.autorange": False}],
+                ),
+            ],
+            showactive=True,
+            bgcolor="rgba(255,255,255,0.9)",
+            bordercolor="#ccc",
+            borderwidth=1,
+            font=dict(size=11),
+        )],
     )
     return fig
 
