@@ -124,7 +124,7 @@ oro   = obtener_serie("F019.PPB.PRE.44.D")
 plata = obtener_serie("F019.PPB.PRE.45.D")
 cobre = obtener_serie("F019.PPB.PRE.100.D")
 litio = obtener_serie("F019.PPB.PRE.37.D")
-petroleo = obtener_serie("F019.PPB.PRE.41B.D")
+petroleo = obtener_serie("F019.PPB.PRE.41.D")
 
 ipc   = obtener_serie("F074.IPC.IND.Z.EP09.C.M", dias=1095)
 tpm   = obtener_serie("F022.TPM.TIN.D001.NO.Z.M", dias=1095)
@@ -211,7 +211,7 @@ html += tarjeta("Cobre", cobre, sufijo=" ¢/lb", formato=".2f")
 html += tarjeta("Oro", oro, prefijo="$", sufijo=" oz", formato=",.2f")
 html += tarjeta("Plata", plata, prefijo="$", sufijo=" oz", formato=",.2f")
 html += tarjeta("Litio", litio, prefijo="$", sufijo=" oz", formato=",.2f")
-html += tarjeta("Petroleo", petroleo, prefijo="$", sufijo=" oz", formato=",.2f")
+html += tarjeta("Petroleo", petroleo, prefijo="$", sufijo=" barril", formato=",.2f")
 html += '</div>'
 HTML(html)
 ```

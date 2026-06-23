@@ -130,12 +130,29 @@ fig.show()
 
 ## Análisis del ciclo económico de Chile
 
-La **duración promedio del desempleo** mide cuántos meses tarda en promedio una persona desempleada en encontrar trabajo.
+Una serie de tiempo suele estar formada por distintos patrones que actúan al mismo tiempo. La tendencia muestra la dirección general de largo plazo (si la serie crece, cae o se mantiene estable). La estacionalidad corresponde a movimientos que se repiten regularmente en períodos conocidos, como meses, trimestres o estaciones del año. El ciclo refleja fluctuaciones de mayor duración asociadas a fases de expansión y contracción de la actividad económica. Al combinar estos componentes se obtiene la serie observada, permitiendo entender mejor qué parte de los cambios responde a fenómenos permanentes, recurrentes o transitorios.
+
+En este ejemplo, la serie presenta una tendencia creciente, una estacionalidad que genera oscilaciones regulares cada cierto período y un ciclo de mayor duración que produce fases de aceleración y desaceleración. La interacción de estos componentes determina la trayectoria observada de la serie.
+
+
+**La curva Azul** correponde a los datos observados. **La recta naranja** muentra la tendencia de la serie. Mientras que el **ciclo** es de color rojo y la **estacionalidad** es de color verde
+```{python}
+#| echo: false
+from IPython.display import Image
+Image("../imagenes/consumo/ciclo_tendencia_estacionalidad.png", width=800)
+```
+
+
+**Los siguientes gráficos muestran diversas comparaciones del ciclo económico (PIB) y las componentes del gasto del PIB.** 
+
+Para ello se utilizó las series de gasto desestacionalizadas y transformadas en logaritmos.
+
+La siguiente imagen muestra el componente ciclico del PIB y del Consumo Total (*Hogares e IPSFL y Gobierno). Esto representa desviación porcentuales respecto a su tendencia. Cabe mencionar que el Producto y el Consumo se mueven a la par hasta la crisis del Covid-19 durante 2020, los IFes y los 3 retiros de pensiones presionaron el Consumo Total muy por sobre su tendencia.
 
 ```{python}
 #| echo: false
 from IPython.display import Image
-Image("../imagenes/consumo/consumototal.png", width=800)
+Image("../imagenes/economia/consumototal.png", width=800)
 ```
 
 ---
