@@ -142,8 +142,8 @@ from IPython.display import Image
 Image("../imagenes/economia/ciclo_tendencia_estacionalidad.png", width=800)
 ```
 
----
-**Los siguientes gráficos muestran diversas comparaciones del ciclo económico (PIB) y las componentes del gasto del PIB.** 
+
+<strong>Los siguientes gráficos muestran diversas comparaciones del ciclo económico (PIB) y las componentes del gasto del PIB.</strong>
 
 Para ello se utilizó las series de gasto desestacionalizadas y transformadas en logaritmos.
 
