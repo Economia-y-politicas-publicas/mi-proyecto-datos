@@ -243,7 +243,7 @@ def tabla_multi(dfs_nombres, nombre_archivo):
     """)
 ```
 
-```python
+
 # Cargar series fondos soberanos
 fondossoberanos      = obtener_serie("F051.C19.STO.C.Z.USD.M")
 fees                 = obtener_serie("F051.C17.STO.C.Z.USD.M")
@@ -254,7 +254,7 @@ dolar                = obtener_serie("F051.M22.STO.C.Z.USD.M")
 fondoeduc            = obtener_serie("F051.C181.STO.C.Z.USD.M")
 fapr                 = obtener_serie("F051.M11.STO.C.Z.USD.M")
 tratamientoaltocosto = obtener_serie("F051.M12.STO.C.Z.USD.M")
-```
+
 
 ---
 
