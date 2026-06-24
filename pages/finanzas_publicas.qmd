@@ -201,64 +201,7 @@ fig.show()
 ## 3. Sector Público Consolidado
 
 ```{python}
-ultimo_bruto = df["deuda_bruta_sp"].iloc[-1]
-ultimo_neto  = df["deuda_neta_sp"].iloc[-1]
-
-fig = go.Figure()
-
-# Deuda bruta
-fig.add_trace(
-    go.Scatter(
-        x=df["fecha"],
-        y=df["deuda_bruta_sp"],
-        name="Deuda bruta",
-        line=dict(color="#E74C3C", width=3),
-        fill="tozeroy",
-        fillcolor="rgba(231,76,60,0.08)",
-        hovertemplate="%{x|%b %Y}<br><b>Deuda bruta:</b> %{y:.1f}%<extra></extra>",
-    )
-)
-
-# Deuda neta
-fig.add_trace(
-    go.Scatter(
-        x=df["fecha"],
-        y=df["deuda_neta_sp"],
-        name="Deuda neta",
-        line=dict(color="#1F77B4", width=3, dash="dash"),
-        hovertemplate="%{x|%b %Y}<br><b>Deuda neta:</b> %{y:.1f}%<extra></extra>",
-    )
-)
-
-# Línea cero
-fig.add_hline(
-    y=0,
-    line_dash="dot",
-    line_color="gray",
-    opacity=0.5
-)
-
-# Etiquetas al final de las series
-fig.add_annotation(
-    x=df["fecha"].iloc[-1],
-    y=df["deuda_bruta_sp"].iloc[-1],
-    text="Deuda bruta",
-    showarrow=False,
-    font=dict(size=11, color="#E74C3C"),
-    xshift=35
-)
-
-fig.add_annotation(
-    x=df["fecha"].iloc[-1],
-    y=df["deuda_neta_sp"].iloc[-1],
-    text="Deuda neta",
-    showarrow=False,
-    font=dict(size=11, color="#1F77B4"),
-    xshift=35
-)
-
 fig.update_layout(
-
     title=dict(
         text=(
             "Sector Público Consolidado: deuda bruta y neta (% del PIB)"
@@ -269,47 +212,45 @@ fig.update_layout(
         xanchor="center",
         font=dict(size=18)
     ),
-
     template="plotly_white",
     font_family="Inter",
-
     height=560,
-
     hovermode="x unified",
-
+    
     yaxis=dict(
         title="% del PIB",
         tickformat=".0f",
         gridcolor="rgba(0,0,0,0.08)",
-        zeroline=False
+        zeroline=False,
+        # Opcional: darle un poco más de aire arriba (ej. hasta 70)
+        # range=[-25, 70] 
     ),
-
+    
     xaxis=dict(
-        dtick="M12",
-        tickformat="%Y",
-        tickangle=45,
+        # Dejamos que Plotly respire y elija los años sin superponerlos
+        nticks=12, 
+        tickangle=0,
         showgrid=False,
         rangeslider=dict(
-            visible=True,
-            thickness=0.025
+            visible=False # Apagamos el mini-slider que ensucia el eje X
         )
     ),
-
+    
     showlegend=False,
-
+    
     margin=dict(
         l=70,
-        r=90,
-        t=90,
-        b=90
+        r=100, # Un poco más de margen derecho para que no se corten las etiquetas
+        t=100, # Más aire arriba
+        b=80
     )
 )
 
-# Fuente más abajo para evitar superposición
+# Fuente más abajo para evitar superposición, ajustada al no tener rangeslider
 fig.add_annotation(
-    text=AUTOR,
+    text=AUTOR,  # Asegúrate de tener esta variable definida
     x=0,
-    y=-0.22,
+    y=-0.15,
     xref="paper",
     yref="paper",
     showarrow=False,
