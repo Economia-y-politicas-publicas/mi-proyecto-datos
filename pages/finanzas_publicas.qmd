@@ -201,6 +201,8 @@ fig.show()
 ## 3. Sector Público Consolidado
 
 ```{python}
+ultimo_bruto = df["deuda_bruta_sp"].iloc[-1]
+ultimo_neto  = df["deuda_neta_sp"].iloc[-1]
 fig.update_layout(
     title=dict(
         text=(
