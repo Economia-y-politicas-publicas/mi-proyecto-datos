@@ -25,6 +25,8 @@ website:
         text: Mercado Laboral
       - href: pages/indicadores_vivo.qmd
         text: "📡 Indicadores en Vivo"
+      - href: pages/Donaciones.qmd
+        text: "Donaciones"
     right:
       - icon: github
         href: https://github.com/Economia-y-politicas-publicas/chiledatos

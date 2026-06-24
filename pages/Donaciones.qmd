@@ -1,0 +1,120 @@
+---
+title: "Apoya este proyecto"
+subtitle: "Donaciones para mantener y mejorar la plataforma"
+date: last-modified
+---
+
+Este proyecto se mantiene gracias al tiempo libre y al apoyo de la comunidad. Si la información y los gráficos te han sido útiles, puedes ayudar a cubrir los costos de servidores y desarrollo con un aporte voluntario.
+
+::: {.callout-note icon=false title="Datos para Transferencia Bancaria"}
+* **Banco:** BancoEstado (Ejemplo)
+* **Tipo de Cuenta:** Cuenta Corriente / Cuenta RUT
+* **Número de Cuenta:** 123456789
+* **RUT:** 11.222.333-4
+* **Nombre:** Tu Nombre Aquí
+* **Correo:** tu.correo@ejemplo.cl
+
+*Por favor, incluye tu nombre o alias en el mensaje de la transferencia para agregarte al registro de aportes (puedes indicar si prefieres ser anónimo).*
+:::
+
+---
+
+## Transparencia de Aportes
+
+A continuación se muestra la evolución de los aportes recibidos a lo largo del tiempo. Todo lo recaudado se reinvierte directamente en el proyecto.
+
+```{python}
+#| label: setup-donaciones
+#| echo: false
+#| message: false
+#| warning: false
+
+import pandas as pd
+import plotly.graph_objects as go
+from IPython.display import Markdown
+
+# URL de tu futuro archivo CSV en GitHub (ajusta si la ruta es distinta)
+url_csv = "[https://raw.githubusercontent.com/Economia-y-politicas-publicas/chiledatos/main/data/donaciones.csv](https://raw.githubusercontent.com/Economia-y-politicas-publicas/chiledatos/main/data/donaciones.csv)"
+
+try:
+    # Intentar leer el CSV real
+    df = pd.read_csv(url_csv)
+    df["fecha"] = pd.to_datetime(df["fecha"])
+    df = df.sort_values("fecha")
+except:
+    # Datos de prueba temporales mientras creas el CSV real
+    df = pd.DataFrame({
+        "fecha": pd.to_datetime(["2026-06-01", "2026-06-15", "2026-06-20"]),
+        "nombre": ["Usuario Anónimo", "María Gómez", "Carlos Ruiz"],
+        "monto": [5000, 15000, 10000],
+        "mensaje": ["Excelente trabajo", "Para el servidor", ""]
+    })
+
+# Calcular el acumulado en el tiempo
+df["acumulado"] = df["monto"].cumsum()
+
+# Extraer datos clave
+total_recaudado = df["monto"].sum()
+ultimo_monto = df["acumulado"].iloc[-1]
+
+#| echo: false
+
+fig = go.Figure()
+
+fig.add_trace(
+    go.Scatter(
+        x=df["fecha"],
+        y=df["acumulado"],
+        mode="lines+markers",
+        name="Acumulado",
+        line=dict(color="#27ae60", width=3, shape="hv"), # shape="hv" hace que parezca una escalera (step chart)
+        marker=dict(size=8, color="#27ae60"),
+        fill="tozeroy",
+        fillcolor="rgba(39, 174, 96, 0.1)",
+        hovertemplate="<b>%{x|%d %b %Y}</b><br>Total acumulado: $%{y:,.0f}<extra></extra>",
+    )
+)
+
+fig.update_layout(
+    title=dict(
+        text=f"Total Histórico Recaudado: ${total_recaudado:,.0f}",
+        x=0.5,
+        xanchor="center",
+        font=dict(size=18)
+    ),
+    template="plotly_white",
+    font_family="Inter",
+    height=400,
+    autosize=True,
+    hovermode="x unified",
+    yaxis=dict(
+        title="CLP ($)",
+        tickformat=",.0f",
+        gridcolor="rgba(0,0,0,0.08)",
+        zeroline=False,
+        rangemode="tozero"
+    ),
+    xaxis=dict(
+        tickformat="%d %b %Y",
+        showgrid=False
+    ),
+    margin=dict(l=70, r=40, t=80, b=50)
+)
+
+fig.show(config={'displayModeBar': False})
+
+#| echo: false
+# Generar una tabla Markdown limpia con los datos recientes invertidos (los más nuevos arriba)
+df_tabla = df.sort_values("fecha", ascending=False).copy()
+df_tabla["fecha_str"] = df_tabla["fecha"].dt.strftime("%d/%m/%Y")
+df_tabla["monto_str"] = df_tabla["monto"].apply(lambda x: f"${x:,.0f}")
+
+# Reemplazar NaN en mensajes por string vacío
+df_tabla["mensaje"] = df_tabla["mensaje"].fillna("")
+
+tabla_md = "| Fecha | Nombre | Monto | Mensaje |\n|:---|:---|:---|:---|\n"
+for _, row in df_tabla.iterrows():
+    tabla_md += f"| {row['fecha_str']} | {row['nombre']} | {row['monto_str']} | {row['mensaje']} |\n"
+
+Markdown(tabla_md)
+
