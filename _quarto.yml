@@ -15,7 +15,7 @@ website:
     left:
       - href: index.qmd
         text: Inicio
-      - text: "Noticias"
+      - text: "📰 Noticias"
         href: pages/noticias.qmd
       - href: pages/economia.qmd
         text: Economía

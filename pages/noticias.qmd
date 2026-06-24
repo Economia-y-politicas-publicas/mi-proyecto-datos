@@ -5,36 +5,147 @@ toc: false
 ---
 
 ```{=html}
+
+<div id="particles-js" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1;"></div>
+<script src="https://cdn.jsdelivr.net/npm/tsparticles-slim@2/tsparticles.slim.bundle.min.js"></script>
+<script>
+tsParticles.load("particles-js", {
+  particles: {
+    number: { value: 80 },
+    color: { value: "#ffffff" },
+    opacity: { value: 0.6 },
+    size: { value: 3 },
+    move: { enable: true, speed: 0.9 },
+    links: {
+      enable: true,
+      color: "#ffffff",
+      opacity: 0.35,
+      distance: 130,
+    },
+  },
+  background: { color: "#1a1a2e" },
+});
+</script>
+
+
+
+
+
+
+<style>
+.noticias-container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 1rem 0rem 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 5;
+}
+
+
+.noticia-card {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2.5rem 2.5rem;
+}
+
+.noticia-card:first-child {
+  padding-top: 2rem;
+}
+
+.noticia-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  margin-bottom: 1.4rem;
+}
+
+.noticia-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.8rem;
+}
+
+.noticia-fecha {
+  font-size: 0.78rem;
+  color: #888;
+  letter-spacing: 0.02em;
+}
+
+.noticia-tag {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 3px 10px;
+  border-radius: 4px;
+}
+
+.tag-politica  { background: rgba(79,195,247,0.12); color: #4fc3f7; border: 1px solid rgba(79,195,247,0.25); }
+.tag-laboral   { background: rgba(105,212,154,0.12); color: #69d49a; border: 1px solid rgba(105,212,154,0.25); }
+.tag-economia  { background: rgba(251,191,36,0.12);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+.tag-finanzas  { background: rgba(192,132,252,0.12); color: #c084fc; border: 1px solid rgba(192,132,252,0.25); }
+
+.noticia-card h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #f0f0f0;
+  margin: 0 0 1.1rem;
+  letter-spacing: -0.01em;
+}
+
+.noticia-card p {
+  font-size: 0.96rem;
+  line-height: 1.85;
+  color: #b0b8c8;
+  margin: 0 0 0.9rem;
+}
+
+.noticia-card p:last-child {
+  margin-bottom: 0;
+}
+
+.noticia-divider {
+  width: 40px;
+  height: 2px;
+  background: #e94560;
+  border: none;
+  margin: 0 0 1.1rem;
+  border-radius: 2px;
+}
+</style>
+
 <div class="noticias-container">
 
   <!-- NOTICIA 1 -->
   <div class="noticia-card">
-    <img src="../images/24_06 grau.png" alt="Acusación constitucional contra exministro Grau">
-    <div class="noticia-body">
-      <div class="noticia-meta">
-        <span class="noticia-fecha">📅 24 junio 2025</span>
-        <span class="noticia-tag tag-politica">Política</span>
-      </div>
-      <h2>Cámara aprueba acusación contra exministro Grau. La palabra final la tiene el Senado.</h2>
-      <p>La Cámara de Diputadas y Diputados aprobó este 23 de junio la acusación constitucional presentada contra el exministro de Hacienda Nicolás Grau, permitiendo que el libelo avance a su siguiente etapa de tramitación en el Senado. La iniciativa fue respaldada por 77 votos a favor, 68 en contra y una abstención.</p>
-      <p>La acusación fue impulsada por parlamentarios del Partido Republicano y del Partido Nacional Libertario, quienes sostienen que durante la gestión de Grau se produjeron graves errores e inconsistencias en las proyecciones fiscales contenidas en el Informe de Finanzas Públicas correspondiente al cuarto trimestre de 2025.</p>
-      <p>La aprobación del libelo se produjo pese a que la comisión revisora de la Cámara había recomendado rechazar la acusación. Asimismo, la defensa del exministro argumentó que el Consejo Fiscal Autónomo no detectó inconsistencias aritméticas en las proyecciones fiscales cuestionadas.</p>
-      <p>La votación también dejó en evidencia divisiones al interior de la oposición. Aunque la mayoría de los diputados de Chile Vamos respaldó la acusación, algunos parlamentarios de Renovación Nacional, Evópoli y del Partido de la Gente votaron en contra, generando tensiones dentro del bloque.</p>
-      <p>Tras la votación, Grau señaló que el resultado refleja la actual composición política de la Cámara y manifestó confianza en que el Senado realizará un análisis jurídico más detallado. El exministro arriesga una eventual inhabilitación para ejercer cargos públicos por cinco años si el Senado aprueba la acusación.</p>
-      <p>Ahora corresponderá al Senado actuar como jurado político y resolver si acoge o rechaza el libelo. La decisión será clave para determinar las consecuencias institucionales y políticas de uno de los procesos de fiscalización más relevantes iniciados contra una exautoridad económica en los últimos años.</p>
+    <img src="../imagenes/noticias/24_06_grau.png" alt="Acusación constitucional contra exministro Grau">
+    <div class="noticia-meta">
+      <span class="noticia-fecha">24 junio 2025</span>
+      <span class="noticia-tag tag-politica">Política</span>
     </div>
+    <hr class="noticia-divider">
+    <h2>Cámara aprueba acusación contra exministro Grau. La palabra final la tiene el Senado.</h2>
+    <p>La Cámara de Diputadas y Diputados aprobó este 23 de junio la acusación constitucional presentada contra el exministro de Hacienda Nicolás Grau, permitiendo que el libelo avance a su siguiente etapa de tramitación en el Senado. La iniciativa fue respaldada por 77 votos a favor, 68 en contra y una abstención.</p>
+    <p>La acusación fue impulsada por parlamentarios del Partido Republicano y del Partido Nacional Libertario, quienes sostienen que durante la gestión de Grau se produjeron graves errores e inconsistencias en las proyecciones fiscales contenidas en el Informe de Finanzas Públicas correspondiente al cuarto trimestre de 2025.</p>
+    <p>La aprobación del libelo se produjo pese a que la comisión revisora de la Cámara había recomendado rechazar la acusación. Asimismo, la defensa del exministro argumentó que el Consejo Fiscal Autónomo no detectó inconsistencias aritméticas en las proyecciones fiscales cuestionadas.</p>
+    <p>La votación también dejó en evidencia divisiones al interior de la oposición. Aunque la mayoría de los diputados de Chile Vamos respaldó la acusación, algunos parlamentarios de Renovación Nacional, Evópoli y del Partido de la Gente votaron en contra, generando tensiones dentro del bloque.</p>
+    <p>Tras la votación, Grau señaló que el resultado refleja la actual composición política de la Cámara y manifestó confianza en que el Senado realizará un análisis jurídico más detallado. El exministro arriesga una eventual inhabilitación para ejercer cargos públicos por cinco años si el Senado aprueba la acusación.</p>
+    <p>Ahora corresponderá al Senado actuar como jurado político y resolver si acoge o rechaza el libelo. La decisión será clave para determinar las consecuencias institucionales y políticas de uno de los procesos de fiscalización más relevantes iniciados contra una exautoridad económica en los últimos años.</p>
   </div>
 
   <!-- NOTICIA 2 -->
   <div class="noticia-card">
-    <div class="noticia-body">
-      <div class="noticia-meta">
-        <span class="noticia-fecha">📅 20 junio 2025</span>
-        <span class="noticia-tag tag-laboral">Mercado Laboral</span>
-      </div>
-      <h2>Otra noticia importante</h2>
-      <p>Contenido de la segunda noticia...</p>
+    <div class="noticia-meta">
+      <span class="noticia-fecha">20 junio 2025</span>
+      <span class="noticia-tag tag-laboral">Mercado Laboral</span>
     </div>
+    <hr class="noticia-divider">
+    <h2>Otra noticia importante</h2>
+    <p>Contenido de la segunda noticia...</p>
   </div>
 
 </div>

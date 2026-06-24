@@ -71,16 +71,64 @@ Todas las fuentes son públicas y descargables.
 ## 📰 Últimas Noticias
 
 ```{=html}
+<style>
+.noticias-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.noticia-mini {
+  background: #16213e;
+  border: 1px solid #0f3460;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  color: #e0e0e0;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: transform 0.2s, border-color 0.2s;
+}
+.noticia-mini:hover {
+  transform: translateY(-3px);
+  border-color: #e94560;
+  color: #fff;
+  text-decoration: none;
+}
+.mini-fecha { font-size: 0.75rem; color: #888; }
+.mini-tag {
+  font-size: 0.7rem;
+  background: #0f3460;
+  color: #4fc3f7;
+  padding: 2px 8px;
+  border-radius: 20px;
+  width: fit-content;
+}
+.mini-titulo {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0.2rem 0;
+}
+.mini-leer { font-size: 0.8rem; color: #e94560; margin-top: auto; }
+.noticia-mini-ver-todas {
+  border-style: dashed;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+</style>
+
 <div class="noticias-preview">
 
-  <a href="pages/noticias.html#noticia-1" class="noticia-mini">
+  <a href="pages/noticias.html" class="noticia-mini">
     <span class="mini-fecha">24 jun 2025</span>
-    <span class="mini-tag">Economía</span>
-    <p class="mini-titulo">Título corto de la noticia</p>
+    <span class="mini-tag">Política</span>
+    <p class="mini-titulo">Cámara aprueba acusación contra exministro Grau</p>
     <span class="mini-leer">Leer más →</span>
   </a>
 
-  <a href="pages/noticias.html#noticia-2" class="noticia-mini">
+  <a href="pages/noticias.html" class="noticia-mini">
     <span class="mini-fecha">20 jun 2025</span>
     <span class="mini-tag">Mercado Laboral</span>
     <p class="mini-titulo">Otra noticia reciente</p>
