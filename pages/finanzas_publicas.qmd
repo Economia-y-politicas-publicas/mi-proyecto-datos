@@ -174,31 +174,59 @@ def grafico_multi(trazas, titulo, ytitle):
     )
     return fig
 
+```python
 def tabla_multi(dfs_nombres, nombre_archivo):
     """Tabla desplegable para gráficos con múltiples series."""
+
     dfs = []
+
     for df_, nombre in dfs_nombres:
+
         if df_.empty:
             continue
-        tmp = df_[["fecha","valor"]].copy()
+
+        # Detectar automáticamente la columna de datos
+        columnas = [c for c in df_.columns if c != "fecha"]
+
+        if len(columnas) == 0:
+            continue
+
+        col_valor = columnas[0]
+
+        tmp = df_[["fecha", col_valor]].copy()
         tmp["fecha"] = tmp["fecha"].dt.strftime("%b %Y")
         tmp.columns = ["Período", nombre]
+
         dfs.append(tmp.set_index("Período"))
+
     if not dfs:
         return HTML("")
+
     df_tabla = pd.concat(dfs, axis=1).reset_index()
-    df_tabla = df_tabla.sort_values("Período", ascending=False)
+
+    df_tabla = df_tabla.sort_values(
+        "Período",
+        ascending=False
+    )
+
     tabla_html = df_tabla.to_html(
         index=False,
         classes="table table-sm table-striped table-hover",
         border=0,
     )
+
     csv = df_tabla.to_csv(index=False)
     b64 = base64.b64encode(csv.encode()).decode()
-    boton = f'''<a href="data:text/csv;base64,{b64}"
+
+    boton = f'''
+    <a href="data:text/csv;base64,{b64}"
        download="{nombre_archivo}.csv"
        class="btn btn-sm btn-outline-secondary"
-       style="margin-bottom:.75rem;">⬇ Descargar CSV</a>'''
+       style="margin-bottom:.75rem;">
+       ⬇ Descargar CSV
+    </a>
+    '''
+
     return HTML(f"""
     <details style="margin-top:.25rem; margin-bottom:1.5rem;">
       <summary style="cursor:pointer; color:#3498db; font-size:.9rem; margin-bottom:.5rem;">
@@ -212,6 +240,8 @@ def tabla_multi(dfs_nombres, nombre_archivo):
       </div>
     </details>
     """)
+```
+
 
 # Cargar series fondos soberanos
 fondossoberanos      = obtener_serie("F051.C19.STO.C.Z.USD.M")
