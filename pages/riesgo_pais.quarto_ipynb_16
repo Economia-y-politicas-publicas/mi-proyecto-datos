@@ -10,7 +10,7 @@
         "date: last-modified\n",
         "---"
       ],
-      "id": "4059a03e"
+      "id": "837d48bd"
     },
     {
       "cell_type": "code",
@@ -115,7 +115,7 @@
         "> **Último dato ({ultima_fecha}):** EMBI Chile = **{ultimo_valor:.2f}%**\n",
         "\"\"\"))"
       ],
-      "id": "7332e1f2",
+      "id": "54980c39",
       "execution_count": null,
       "outputs": []
     },
@@ -169,7 +169,7 @@
         "else:\n",
         "    display(Markdown(\"_No hay datos disponibles._\"))"
       ],
-      "id": "a2820f18",
+      "id": "eb8d4f80",
       "execution_count": null,
       "outputs": []
     },
@@ -269,7 +269,7 @@
         "\n",
         "    fig2.show(config={\"displayModeBar\": True})"
       ],
-      "id": "ed3a4ca3",
+      "id": "d5eb4220",
       "execution_count": null,
       "outputs": []
     },
@@ -338,7 +338,7 @@
         "\n",
         "    fig3.show(config={\"displayModeBar\": True})"
       ],
-      "id": "d203b711",
+      "id": "6d19c00e",
       "execution_count": null,
       "outputs": []
     }

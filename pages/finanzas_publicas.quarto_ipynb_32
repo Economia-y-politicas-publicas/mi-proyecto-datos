@@ -10,7 +10,7 @@
         "date: last-modified\n",
         "---"
       ],
-      "id": "19ce3407"
+      "id": "8b9bbd69"
     },
     {
       "cell_type": "code",
@@ -176,7 +176,7 @@
         "\n",
         "## 1. Gobierno Central"
       ],
-      "id": "4a613011"
+      "id": "f84e827c"
     },
     {
       "cell_type": "code",
@@ -199,7 +199,7 @@
         "agregar_autor(fig)\n",
         "fig.show()"
       ],
-      "id": "fb9e6f9e",
+      "id": "2410acdb",
       "execution_count": null,
       "outputs": []
     },
@@ -209,7 +209,7 @@
       "source": [
         "## 2. Banco Central"
       ],
-      "id": "5aefb8fe"
+      "id": "00d22aee"
     },
     {
       "cell_type": "code",
@@ -232,7 +232,7 @@
         "agregar_autor(fig)\n",
         "fig.show()"
       ],
-      "id": "46dbab36",
+      "id": "5edd1fcd",
       "execution_count": null,
       "outputs": []
     },
@@ -242,7 +242,7 @@
       "source": [
         "## 3. Sector Público Consolidado"
       ],
-      "id": "a7ee0662"
+      "id": "01cbee06"
     },
     {
       "cell_type": "code",
@@ -366,7 +366,7 @@
         "\n",
         "fig.show()"
       ],
-      "id": "012a18db",
+      "id": "d3663e77",
       "execution_count": null,
       "outputs": []
     },
@@ -376,7 +376,7 @@
       "source": [
         "## 4. Empresas Públicas"
       ],
-      "id": "283696e8"
+      "id": "cc2f496e"
     },
     {
       "cell_type": "code",
@@ -399,7 +399,7 @@
         "agregar_autor(fig)\n",
         "fig.show()"
       ],
-      "id": "06275260",
+      "id": "888ba7f6",
       "execution_count": null,
       "outputs": []
     },
@@ -413,7 +413,7 @@
         "\n",
         "### 📦 Fondos Soberanos: Total, FEES y FRP"
       ],
-      "id": "dc0a19ba"
+      "id": "8e6e4dfe"
     },
     {
       "cell_type": "code",
@@ -429,7 +429,7 @@
         "    ytitle=\"Millones de USD\",\n",
         ").show()"
       ],
-      "id": "43d6f83c",
+      "id": "b4c75ec7",
       "execution_count": null,
       "outputs": []
     },
@@ -439,7 +439,7 @@
       "source": [
         "### 🏦 Otros Activos del Tesoro Público (OATP)"
       ],
-      "id": "cfaa09fa"
+      "id": "afdb8ad6"
     },
     {
       "cell_type": "code",
@@ -455,7 +455,7 @@
         "    ytitle=\"Millones de USD\",\n",
         ").show()"
       ],
-      "id": "a3268074",
+      "id": "f563209d",
       "execution_count": null,
       "outputs": []
     },
@@ -465,7 +465,7 @@
       "source": [
         "### 🎓 Fondos para la Educación (FpE)"
       ],
-      "id": "717bade2"
+      "id": "5092afd3"
     },
     {
       "cell_type": "code",
@@ -474,7 +474,7 @@
         "grafico_linea(fondoeduc, \"Fondos para la Educación (FpE)\",\n",
         "              \"Millones de USD\", color=\"rgb(243,156,18)\").show()"
       ],
-      "id": "7252b136",
+      "id": "a557b372",
       "execution_count": null,
       "outputs": []
     },
@@ -484,7 +484,7 @@
       "source": [
         "### 🗺️ Fondo de Apoyo Regional (FAPR)"
       ],
-      "id": "48651602"
+      "id": "affa914c"
     },
     {
       "cell_type": "code",
@@ -493,7 +493,7 @@
         "grafico_linea(fapr, \"Fondo de Apoyo a las Regiones (FAPR)\",\n",
         "              \"Millones de USD\", color=\"rgb(22,160,133)\").show()"
       ],
-      "id": "e803aee0",
+      "id": "941d437d",
       "execution_count": null,
       "outputs": []
     },
@@ -503,7 +503,7 @@
       "source": [
         "### 🏥 Fondo para Diagnósticos y Tratamientos de Alto Costo"
       ],
-      "id": "bc34232a"
+      "id": "69615f7e"
     },
     {
       "cell_type": "code",
@@ -513,7 +513,7 @@
         "              \"Fondo para Diagnósticos y Tratamientos de Alto Costo\",\n",
         "              \"Millones de USD\", color=\"rgb(231,76,60)\").show()"
       ],
-      "id": "8f376ea0",
+      "id": "d5922803",
       "execution_count": null,
       "outputs": []
     }

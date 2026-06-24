@@ -11,7 +11,7 @@
         "author: \"Tu Nombre\"\n",
         "---"
       ],
-      "id": "babe29ea"
+      "id": "4e6b6550"
     },
     {
       "cell_type": "code",
@@ -70,7 +70,7 @@
         "\n",
         "## 1. Morosidad por carrera"
       ],
-      "id": "6f541246"
+      "id": "c973c7a9"
     },
     {
       "cell_type": "code",
@@ -119,7 +119,7 @@
       "source": [
         "## 2. Distribución por tipo de institución"
       ],
-      "id": "572ba566"
+      "id": "e442d070"
     },
     {
       "cell_type": "code",
@@ -156,7 +156,7 @@
       "source": [
         "## 3. Mapa por región"
       ],
-      "id": "175a88d0"
+      "id": "53360d1d"
     },
     {
       "cell_type": "code",
@@ -200,7 +200,7 @@
       "source": [
         "## 4. Relación deuda vs. morosidad"
       ],
-      "id": "65297b99"
+      "id": "d6a181c0"
     },
     {
       "cell_type": "code",
@@ -239,7 +239,7 @@
       "source": [
         "## Tabla de datos"
       ],
-      "id": "4c85cc33"
+      "id": "0b76abab"
     },
     {
       "cell_type": "code",

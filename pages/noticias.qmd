@@ -1,0 +1,41 @@
+---
+title: "📰 Noticias"
+page-layout: full
+toc: false
+---
+
+```{=html}
+<div class="noticias-container">
+
+  <!-- NOTICIA 1 -->
+  <div class="noticia-card">
+    <img src="../images/24_06 grau.png" alt="Acusación constitucional contra exministro Grau">
+    <div class="noticia-body">
+      <div class="noticia-meta">
+        <span class="noticia-fecha">📅 24 junio 2025</span>
+        <span class="noticia-tag tag-politica">Política</span>
+      </div>
+      <h2>Cámara aprueba acusación contra exministro Grau. La palabra final la tiene el Senado.</h2>
+      <p>La Cámara de Diputadas y Diputados aprobó este 23 de junio la acusación constitucional presentada contra el exministro de Hacienda Nicolás Grau, permitiendo que el libelo avance a su siguiente etapa de tramitación en el Senado. La iniciativa fue respaldada por 77 votos a favor, 68 en contra y una abstención.</p>
+      <p>La acusación fue impulsada por parlamentarios del Partido Republicano y del Partido Nacional Libertario, quienes sostienen que durante la gestión de Grau se produjeron graves errores e inconsistencias en las proyecciones fiscales contenidas en el Informe de Finanzas Públicas correspondiente al cuarto trimestre de 2025.</p>
+      <p>La aprobación del libelo se produjo pese a que la comisión revisora de la Cámara había recomendado rechazar la acusación. Asimismo, la defensa del exministro argumentó que el Consejo Fiscal Autónomo no detectó inconsistencias aritméticas en las proyecciones fiscales cuestionadas.</p>
+      <p>La votación también dejó en evidencia divisiones al interior de la oposición. Aunque la mayoría de los diputados de Chile Vamos respaldó la acusación, algunos parlamentarios de Renovación Nacional, Evópoli y del Partido de la Gente votaron en contra, generando tensiones dentro del bloque.</p>
+      <p>Tras la votación, Grau señaló que el resultado refleja la actual composición política de la Cámara y manifestó confianza en que el Senado realizará un análisis jurídico más detallado. El exministro arriesga una eventual inhabilitación para ejercer cargos públicos por cinco años si el Senado aprueba la acusación.</p>
+      <p>Ahora corresponderá al Senado actuar como jurado político y resolver si acoge o rechaza el libelo. La decisión será clave para determinar las consecuencias institucionales y políticas de uno de los procesos de fiscalización más relevantes iniciados contra una exautoridad económica en los últimos años.</p>
+    </div>
+  </div>
+
+  <!-- NOTICIA 2 -->
+  <div class="noticia-card">
+    <div class="noticia-body">
+      <div class="noticia-meta">
+        <span class="noticia-fecha">📅 20 junio 2025</span>
+        <span class="noticia-tag tag-laboral">Mercado Laboral</span>
+      </div>
+      <h2>Otra noticia importante</h2>
+      <p>Contenido de la segunda noticia...</p>
+    </div>
+  </div>
+
+</div>
+```

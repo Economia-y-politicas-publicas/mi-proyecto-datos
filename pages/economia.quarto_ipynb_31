@@ -29,7 +29,7 @@
         "\n",
         "---"
       ],
-      "id": "ffbda737"
+      "id": "1e6d374e"
     },
     {
       "cell_type": "code",
@@ -77,7 +77,7 @@
       "source": [
         "## Crecimiento del PIB real"
       ],
-      "id": "f1ee50f0"
+      "id": "9e537c07"
     },
     {
       "cell_type": "code",
@@ -118,7 +118,7 @@
       "source": [
         "## Tendencia"
       ],
-      "id": "bf0afd2b"
+      "id": "78625ccb"
     },
     {
       "cell_type": "code",
@@ -179,7 +179,7 @@
         "\n",
         "**La curva Azul** correponde a los datos observados. **La recta naranja** muentra la tendencia de la serie. Mientras que el **ciclo** es de color rojo y la **estacionalidad** es de color verde"
       ],
-      "id": "6f1eb058"
+      "id": "db7dd9b7"
     },
     {
       "cell_type": "code",
@@ -189,7 +189,7 @@
         "from IPython.display import Image\n",
         "Image(\"../imagenes/economia/ciclo_tendencia_estacionalidad.png\", width=800)"
       ],
-      "id": "0efbfaea",
+      "id": "b32abd4a",
       "execution_count": null,
       "outputs": []
     },
@@ -203,7 +203,7 @@
         "\n",
         "La siguiente imagen muestra el componente ciclico del PIB y del Consumo Total (**Hogares e IPSFL y Gobierno**). Esto representa desviación porcentuales respecto a su tendencia. Cabe mencionar que el Producto y el Consumo se mueven a la par hasta la crisis del Covid-19 durante 2020, los IFes y los 3 retiros de pensiones presionaron el Consumo Total muy por sobre su tendencia."
       ],
-      "id": "41d0233d"
+      "id": "6499663a"
     },
     {
       "cell_type": "code",
@@ -213,7 +213,7 @@
         "from IPython.display import Image\n",
         "Image(\"../imagenes/economia/consumototal.png\", width=800)"
       ],
-      "id": "dd9698f0",
+      "id": "043b6175",
       "execution_count": null,
       "outputs": []
     },
@@ -223,7 +223,7 @@
       "source": [
         "---"
       ],
-      "id": "3b9c3a9b"
+      "id": "68ea2cc9"
     }
   ],
   "metadata": {

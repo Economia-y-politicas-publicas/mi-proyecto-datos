@@ -24,3 +24,71 @@ $headings-font-weight: 700;
   border: 1px solid rgba(0,0,0,.08);
   box-shadow: 0 2px 8px rgba(0,0,0,.06);
 }
+
+/* ---- Página de noticias ---- */
+.noticias-container {
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  padding: 1rem 0 3rem;
+}
+
+.noticia-card {
+  background: var(--bs-body-bg);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+
+.noticia-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.noticia-body {
+  padding: 1.5rem 2rem;
+}
+
+.noticia-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.noticia-fecha {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.noticia-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+}
+
+.tag-politica  { background: #1e3a5f; color: #4fc3f7; }
+.tag-laboral   { background: #1a3d2b; color: #69d49a; }
+.tag-economia  { background: #3d2a00; color: #fbbf24; }
+.tag-finanzas  { background: #2d1a3d; color: #c084fc; }
+
+.noticia-card h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.4;
+  margin: 0 0 1rem;
+}
+
+.noticia-card p {
+  font-size: 0.97rem;
+  line-height: 1.8;
+  color: #ccc;
+  margin-bottom: 0.85rem;
+}

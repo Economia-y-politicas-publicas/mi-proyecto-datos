@@ -68,6 +68,34 @@ Todas las fuentes son públicas y descargables.
 
 :::
 
+## 📰 Últimas Noticias
+
+```{=html}
+<div class="noticias-preview">
+
+  <a href="pages/noticias.html#noticia-1" class="noticia-mini">
+    <span class="mini-fecha">24 jun 2025</span>
+    <span class="mini-tag">Economía</span>
+    <p class="mini-titulo">Título corto de la noticia</p>
+    <span class="mini-leer">Leer más →</span>
+  </a>
+
+  <a href="pages/noticias.html#noticia-2" class="noticia-mini">
+    <span class="mini-fecha">20 jun 2025</span>
+    <span class="mini-tag">Mercado Laboral</span>
+    <p class="mini-titulo">Otra noticia reciente</p>
+    <span class="mini-leer">Leer más →</span>
+  </a>
+
+  <a href="pages/noticias.html" class="noticia-mini noticia-mini-ver-todas">
+    <p class="mini-titulo">Ver todas las noticias</p>
+    <span class="mini-leer">Ir a noticias →</span>
+  </a>
+
+</div>
+```
+
+
 ---
 
 ## ¿Qué es el PIB?

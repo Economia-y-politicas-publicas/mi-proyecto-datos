@@ -14,7 +14,7 @@
         "\n",
         "El mercado laboral es uno de los indicadores más importantes del bienestar económico de un país. En Chile, el **Instituto Nacional de Estadísticas (INE)** publica mensualmente la **Encuesta Nacional de Empleo (ENE)**, que mide el estado laboral de la población a través de períodos móviles de tres meses."
       ],
-      "id": "4a27be7b"
+      "id": "fcc0de9c"
     },
     {
       "cell_type": "code",
@@ -161,7 +161,7 @@
         "\n",
         "En Chile la tasa de desempleo ha oscilado históricamente entre 5% y 10%, con dos grandes shocks visibles en la serie: la **crisis financiera global de 2009** y la **pandemia COVID-19 de 2020**, que llevó la tasa a un máximo histórico de 13,1% en el trimestre mayo-julio de 2020."
       ],
-      "id": "7b5c2aa3"
+      "id": "522fd19a"
     },
     {
       "cell_type": "code",
@@ -184,7 +184,7 @@
         "agregar_autor(fig)\n",
         "fig.show()"
       ],
-      "id": "1e341d90",
+      "id": "86bdfe84",
       "execution_count": null,
       "outputs": []
     },
@@ -200,7 +200,7 @@
         "\n",
         "Durante la pandemia de 2020, el desempleo masculino superó al femenino temporalmente — fenómeno explicado por la mayor presencia de hombres en sectores golpeados por las restricciones sanitarias (construcción, comercio, transporte)."
       ],
-      "id": "a1b45e7a"
+      "id": "14f00d73"
     },
     {
       "cell_type": "code",
@@ -224,7 +224,7 @@
         "agregar_autor(fig)\n",
         "fig.show()"
       ],
-      "id": "bfc167f5",
+      "id": "6af2d06f",
       "execution_count": null,
       "outputs": []
     },
@@ -240,7 +240,7 @@
         "\n",
         "$$\\text{Brecha} = TD_{\\text{Mujer}} - TD_{\\text{Hombre}}$$"
       ],
-      "id": "1084401a"
+      "id": "e09b568b"
     },
     {
       "cell_type": "code",
@@ -264,7 +264,7 @@
         "agregar_autor(fig)\n",
         "fig.show()"
       ],
-      "id": "cd7fa5b7",
+      "id": "f48c7d2d",
       "execution_count": null,
       "outputs": []
     },
@@ -278,7 +278,7 @@
         "\n",
         "La **duración promedio del desempleo** mide cuántos meses tarda en promedio una persona desempleada en encontrar trabajo."
       ],
-      "id": "eb951da7"
+      "id": "d35456aa"
     },
     {
       "cell_type": "code",
@@ -288,7 +288,7 @@
         "from IPython.display import Image\n",
         "Image(\"../imagenes/trabajo/linkedin.png\", width=800)"
       ],
-      "id": "1c099741",
+      "id": "b2152c52",
       "execution_count": null,
       "outputs": []
     },
@@ -300,7 +300,7 @@
         "\n",
         "## 5. Desempleo por región"
       ],
-      "id": "9d291fe6"
+      "id": "3cff3e95"
     },
     {
       "cell_type": "code",
@@ -360,7 +360,7 @@
         ")\n",
         "fig.show()"
       ],
-      "id": "72366600",
+      "id": "4f66019b",
       "execution_count": null,
       "outputs": []
     },
@@ -374,7 +374,7 @@
         "\n",
         "**Promedios móviles trimestrales, miles de personas. Fuente: INE / Banco Central de Chile.**"
       ],
-      "id": "c6f03d49"
+      "id": "fde13cd9"
     },
     {
       "cell_type": "code",
@@ -384,7 +384,7 @@
         "from IPython.display import Image\n",
         "Image(\"../imagenes/trabajo/trabajo.png\", width=800)"
       ],
-      "id": "40fb455b",
+      "id": "2e886253",
       "execution_count": null,
       "outputs": []
     },
@@ -394,7 +394,7 @@
       "source": [
         "**La población de 15 años y más** corresponde a la **fuerza de trabajo** más los **inactivos**."
       ],
-      "id": "07dd26d8"
+      "id": "c9730dea"
     },
     {
       "cell_type": "code",
@@ -403,7 +403,7 @@
         "grafico_linea(pob15mas, \"Población de 15 años y más\", \"Miles de personas\",\n",
         "              color=\"rgb(20,53,85)\", formato_y=\",.1f\").show()"
       ],
-      "id": "6a9e9caa",
+      "id": "767fd176",
       "execution_count": null,
       "outputs": []
     },
@@ -413,7 +413,7 @@
       "source": [
         "**inactivos**"
       ],
-      "id": "d4377e47"
+      "id": "2c8e0be4"
     },
     {
       "cell_type": "code",
@@ -422,7 +422,7 @@
         "grafico_linea(inactivos, \"Inactivos\", \"Miles de personas\",\n",
         "              color=\"rgb(142,68,173)\", formato_y=\",.1f\").show()"
       ],
-      "id": "a2834c0c",
+      "id": "a87cbda3",
       "execution_count": null,
       "outputs": []
     },
@@ -432,7 +432,7 @@
       "source": [
         "**La fuerza de trabajo** corresponde a la suma de los **ocupados** y **desocupados**."
       ],
-      "id": "b5080981"
+      "id": "c9f52c84"
     },
     {
       "cell_type": "code",
@@ -441,7 +441,7 @@
         "grafico_linea(ftt, \"Fuerza de trabajo total\", \"Miles de personas\",\n",
         "              color=\"rgb(41,128,185)\", formato_y=\",.1f\").show()"
       ],
-      "id": "9eff4eeb",
+      "id": "596ca652",
       "execution_count": null,
       "outputs": []
     },
@@ -451,7 +451,7 @@
       "source": [
         "**ocupados**"
       ],
-      "id": "0155df54"
+      "id": "d8d7ae94"
     },
     {
       "cell_type": "code",
@@ -460,7 +460,7 @@
         "grafico_linea(ocupados, \"Ocupados\", \"Miles de personas\",\n",
         "              color=\"rgb(39,174,96)\", formato_y=\",.1f\").show()"
       ],
-      "id": "f942a381",
+      "id": "a07e6ace",
       "execution_count": null,
       "outputs": []
     },
@@ -470,7 +470,7 @@
       "source": [
         "**desocupados**"
       ],
-      "id": "28f3ac41"
+      "id": "2459e078"
     },
     {
       "cell_type": "code",
@@ -479,7 +479,7 @@
         "grafico_linea(desocupados, \"Desocupados\", \"Miles de personas\",\n",
         "              color=\"rgb(231,76,60)\", formato_y=\",.1f\").show()"
       ],
-      "id": "8eca596f",
+      "id": "b1a06e70",
       "execution_count": null,
       "outputs": []
     },
@@ -489,7 +489,7 @@
       "source": [
         "# ── 7 Índice de Vacantes de Trabajo (IVT) ──────────────────────────────"
       ],
-      "id": "a067e6b6"
+      "id": "4a362053"
     },
     {
       "cell_type": "code",
@@ -597,7 +597,7 @@
         "\n",
         "fig.show()"
       ],
-      "id": "13813c6b",
+      "id": "dd259033",
       "execution_count": null,
       "outputs": []
     }
