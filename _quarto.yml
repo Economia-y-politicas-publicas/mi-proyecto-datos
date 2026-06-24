@@ -15,8 +15,6 @@ website:
     left:
       - href: index.qmd
         text: Inicio
-      - href: pages/educacion.qmd
-        text: Educación
       - href: pages/economia.qmd
         text: Economía
       - href: pages/finanzas_publicas.qmd
