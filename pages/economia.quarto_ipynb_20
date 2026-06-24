@@ -1,0 +1,239 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Indicadores Económicos\"\n",
+        "subtitle: \"Crecimiento del PIB real en Chile\"\n",
+        "date: last-modified\n",
+        "---\n",
+        "\n",
+        "## ¿Qué es el PIB?\n",
+        "\n",
+        "El **Producto Interno Bruto (PIB)** mide el valor total de todos los bienes y servicios producidos dentro de un país en un período determinado. Es el indicador más usado para medir el tamaño y la salud de una economía.\n",
+        "\n",
+        "Cuando el PIB crece, significa que la economía produce más — lo que generalmente se traduce en más empleo e ingresos. Cuando cae, como ocurrió en Chile en 2020 (-6,14%) por la pandemia del COVID-19, indica una contracción económica.\n",
+        "\n",
+        "### ¿Por qué se usa el PIB encadenado?\n",
+        "\n",
+        "El PIB puede medirse a **precios corrientes** (nominales) o a **precios encadenados** (reales). La diferencia es importante:\n",
+        "\n",
+        "- **PIB nominal** incluye el efecto de la inflación — si los precios suben, el PIB sube aunque no se produzca más.\n",
+        "- **PIB real encadenado** elimina el efecto de la inflación, permitiendo comparar el crecimiento verdadero entre años.\n",
+        "\n",
+        "La técnica de **encadenamiento** actualiza el año de referencia periódicamente, evitando que los precios de un año base distorsionen las comparaciones a largo plazo. Es el estándar internacional recomendado por el FMI y usado por el Banco Central de Chile.\n",
+        "\n",
+        "> En los gráficos siguientes se usa siempre el PIB real encadenado, expresado como **tasa de variación anual (%)**.\n",
+        "\n",
+        "---"
+      ],
+      "id": "4ed4a42d"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: setup\n",
+        "#| include: false\n",
+        "\n",
+        "import plotly.express as px\n",
+        "import plotly.graph_objects as go\n",
+        "import pandas as pd\n",
+        "\n",
+        "df = pd.DataFrame({\n",
+        "    \"año\": [1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,\n",
+        "            2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,\n",
+        "            2017,2018,2019,2020,2021,2022,2023,2024,2025],\n",
+        "    \"pib\": [7.39,4.18,-0.27,4.97,3.15,3.20,4.72,6.67,5.84,6.05,\n",
+        "            5.17,3.79,-1.12,5.85,6.22,6.16,3.31,1.79,2.15,1.75,\n",
+        "            1.36,3.99,0.64,-6.14,11.34,2.06,0.68,2.81,2.46],\n",
+        "})\n",
+        "df[\"color\"] = df[\"pib\"].apply(lambda x: \"Positivo\" if x >= 0 else \"Negativo\")\n",
+        "\n",
+        "AUTOR = \"Autor: Juan Miguieles Onetto | Fuente: Banco Central de Chile\"\n",
+        "\n",
+        "def agregar_autor(fig):\n",
+        "    fig.update_layout(\n",
+        "        annotations=[dict(\n",
+        "            text=AUTOR,\n",
+        "            x=0, y=-0.15,\n",
+        "            xref=\"paper\", yref=\"paper\",\n",
+        "            showarrow=False,\n",
+        "            font=dict(size=11, color=\"gray\"),\n",
+        "            xanchor=\"left\",\n",
+        "        )]\n",
+        "    )\n",
+        "    return fig"
+      ],
+      "id": "setup",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Crecimiento del PIB real"
+      ],
+      "id": "d2821226"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: pib-barras\n",
+        "\n",
+        "fig = px.bar(\n",
+        "    df,\n",
+        "    x=\"año\",\n",
+        "    y=\"pib\",\n",
+        "    color=\"color\",\n",
+        "    color_discrete_map={\"Positivo\": \"#2ecc71\", \"Negativo\": \"#e74c3c\"},\n",
+        "    labels={\"pib\": \"Crecimiento PIB real (%)\", \"año\": \"Año\", \"color\": \"\"},\n",
+        "    text_auto=\".2f\",\n",
+        "    template=\"plotly_white\",\n",
+        ")\n",
+        "fig.update_traces(textfont_size=14, textangle=0, textposition=\"outside\")\n",
+        "fig.update_layout(\n",
+        "    title=dict(text=\"Crecimiento anual del PIB real de Chile (1997–2025)\", font=dict(size=18)),\n",
+        "    font=dict(family=\"Inter\", size=15),\n",
+        "    legend=dict(orientation=\"h\", y=-0.2, x=0.5, xanchor=\"center\"),\n",
+        "    yaxis=dict(zeroline=True, zerolinewidth=2, zerolinecolor=\"black\", tickfont=dict(size=13)),\n",
+        "    xaxis=dict(tickfont=dict(size=13)),\n",
+        "    height=550,\n",
+        "    margin=dict(b=80),\n",
+        ")\n",
+        "agregar_autor(fig)\n",
+        "fig.show()"
+      ],
+      "id": "pib-barras",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Tendencia"
+      ],
+      "id": "bf7b2b21"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: pib-linea\n",
+        "\n",
+        "fig = px.line(\n",
+        "    df,\n",
+        "    x=\"año\",\n",
+        "    y=\"pib\",\n",
+        "    markers=True,\n",
+        "    labels={\"pib\": \"Crecimiento PIB real (%)\", \"año\": \"Año\"},\n",
+        "    template=\"plotly_white\",\n",
+        "    color_discrete_sequence=[\"#2980b9\"],\n",
+        ")\n",
+        "fig.add_hline(y=0, line_dash=\"dash\", line_color=\"red\", opacity=0.5)\n",
+        "fig.add_annotation(x=2020, y=-6.14, text=\"COVID-19\", showarrow=True,\n",
+        "                   arrowhead=2, ay=-40, font=dict(size=13))\n",
+        "fig.add_annotation(x=2021, y=11.34, text=\"Rebote\", showarrow=True,\n",
+        "                   arrowhead=2, ay=-40, font=dict(size=13))\n",
+        "fig.update_layout(\n",
+        "    title=dict(text=\"Tendencia del PIB real de Chile\", font=dict(size=18)),\n",
+        "    font=dict(family=\"Inter\", size=14),\n",
+        "    yaxis=dict(tickfont=dict(size=13)),\n",
+        "    xaxis=dict(tickfont=dict(size=13)),\n",
+        "    margin=dict(b=80),\n",
+        ")\n",
+        "agregar_autor(fig)\n",
+        "fig.show()"
+      ],
+      "id": "pib-linea",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Contexto histórico\n",
+        "\n",
+        "| Evento | Año | Crecimiento |\n",
+        "|---|---|---|\n",
+        "| Crisis asiática | 1999 | -0.27% |\n",
+        "| Crisis financiera global | 2009 | -1.12% |\n",
+        "| Estallido social | 2019 | 0.64% |\n",
+        "| Pandemia COVID-19 | 2020 | -6.14% |\n",
+        "| Rebote post-pandemia | 2021 | +11.34% |\n",
+        "\n",
+        "---\n",
+        "\n",
+        "## Análisis del ciclo económico de Chile\n",
+        "\n",
+        "Una serie de tiempo suele estar formada por distintos patrones que actúan al mismo tiempo. La tendencia muestra la dirección general de largo plazo (si la serie crece, cae o se mantiene estable). La estacionalidad corresponde a movimientos que se repiten regularmente en períodos conocidos, como meses, trimestres o estaciones del año. El ciclo refleja fluctuaciones de mayor duración asociadas a fases de expansión y contracción de la actividad económica. Al combinar estos componentes se obtiene la serie observada, permitiendo entender mejor qué parte de los cambios responde a fenómenos permanentes, recurrentes o transitorios.\n",
+        "\n",
+        "En este ejemplo, la serie presenta una tendencia creciente, una estacionalidad que genera oscilaciones regulares cada cierto período y un ciclo de mayor duración que produce fases de aceleración y desaceleración. La interacción de estos componentes determina la trayectoria observada de la serie.\n",
+        "\n",
+        "\n",
+        "**La curva Azul** correponde a los datos observados. **La recta naranja** muentra la tendencia de la serie. Mientras que el **ciclo** es de color rojo y la **estacionalidad** es de color verde"
+      ],
+      "id": "94e95882"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "from IPython.display import Image\n",
+        "Image(\"../imagenes/economia/ciclo_tendencia_estacionalidad.png\", width=800)"
+      ],
+      "id": "1151ee6d",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "<strong>Los siguientes gráficos muestran diversas comparaciones del ciclo económico (PIB) y las componentes del gasto del PIB.</strong>\n",
+        "\n",
+        "Para ello se utilizó las series de gasto desestacionalizadas y transformadas en logaritmos.\n",
+        "\n",
+        "La siguiente imagen muestra el componente ciclico del PIB y del Consumo Total (**Hogares e IPSFL y Gobierno**). Esto representa desviación porcentuales respecto a su tendencia. Cabe mencionar que el Producto y el Consumo se mueven a la par hasta la crisis del Covid-19 durante 2020, los IFes y los 3 retiros de pensiones presionaron el Consumo Total muy por sobre su tendencia."
+      ],
+      "id": "f346e55a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| echo: false\n",
+        "from IPython.display import Image\n",
+        "Image(\"../imagenes/economia/consumototal.png\", width=800)"
+      ],
+      "id": "323ce2de",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "raw",
+      "metadata": {},
+      "source": [
+        "---"
+      ],
+      "id": "715fccbe"
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\juanm\\AppData\\Local\\Programs\\Python\\Python314\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
