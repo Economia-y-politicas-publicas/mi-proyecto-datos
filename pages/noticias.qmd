@@ -11,16 +11,16 @@ toc: false
 <script>
 tsParticles.load("particles-js", {
   particles: {
-    number: { value: 80 },
+    number: { value: 20 },
     color: { value: "#ffffff" },
     opacity: { value: 0.6 },
     size: { value: 3 },
-    move: { enable: true, speed: 0.9 },
+    move: { enable: true, speed: 0.5 },
     links: {
       enable: true,
       color: "#ffffff",
       opacity: 0.35,
-      distance: 130,
+      distance: 150,
     },
   },
   background: { color: "#1a1a2e" },

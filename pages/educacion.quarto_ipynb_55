@@ -1,0 +1,286 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Radiografía del CAE\"\n",
+        "subtitle: \"Crédito con Aval del Estado: morosidad por carrera e institución\"\n",
+        "date: last-modified\n",
+        "author: \"Tu Nombre\"\n",
+        "---"
+      ],
+      "id": "14d5da3c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: setup\n",
+        "#| include: false\n",
+        "\n",
+        "import plotly.express as px\n",
+        "import plotly.graph_objects as go\n",
+        "import pandas as pd\n",
+        "import numpy as np\n",
+        "\n",
+        "np.random.seed(99)\n",
+        "\n",
+        "# ── Datos simulados (reemplaza con pd.read_csv(\"../../data/cae.csv\")) ──────────\n",
+        "carreras = [\n",
+        "    \"Derecho\", \"Medicina\", \"Ingeniería Civil\", \"Psicología\",\n",
+        "    \"Educación\", \"Administración\", \"Técnico en Enfermería\",\n",
+        "    \"Gastronomía\", \"Diseño Gráfico\", \"Contador Auditor\",\n",
+        "]\n",
+        "\n",
+        "regiones = [\"RM\", \"Valparaíso\", \"Biobío\", \"Maule\", \"La Araucanía\"]\n",
+        "\n",
+        "n = 200\n",
+        "df = pd.DataFrame({\n",
+        "    \"carrera\":      np.random.choice(carreras, n),\n",
+        "    \"region\":       np.random.choice(regiones, n),\n",
+        "    \"institucion\":  np.random.choice([\"U. Tradicional\", \"U. Privada\", \"IP\", \"CFT\"], n,\n",
+        "                                      p=[0.25, 0.35, 0.25, 0.15]),\n",
+        "    \"morosidad\":    np.clip(np.random.normal(45, 15, n), 5, 95).round(1),\n",
+        "    \"deuda_promedio\": np.random.randint(3_000_000, 18_000_000, n),\n",
+        "    \"n_deudores\":   np.random.randint(100, 5000, n),\n",
+        "})"
+      ],
+      "id": "setup",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "::: {.callout-note}\n",
+        "Los datos mostrados son **simulados** como ejemplo. Para usar datos reales del CAE,\n",
+        "descárgalos desde el [portal de datos abiertos del MINEDUC](https://datosabiertos.mineduc.cl).\n",
+        ":::\n",
+        "\n",
+        "## Contexto\n",
+        "\n",
+        "El **Crédito con Aval del Estado (CAE)** financia estudios de educación superior en Chile.\n",
+        "Al cierre de 2023, más de **700.000 personas** tienen deuda vigente, con tasas de morosidad\n",
+        "que varían fuertemente según carrera e institución.\n",
+        "\n",
+        "---\n",
+        "\n",
+        "## 1. Morosidad por carrera"
+      ],
+      "id": "e756580a"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: morosidad-carrera\n",
+        "#| fig-cap: Morosidad promedio (%) por carrera. Las barras de error muestran ±1 desviación estándar.\n",
+        "\n",
+        "resumen = (\n",
+        "    df.groupby(\"carrera\")[\"morosidad\"]\n",
+        "    .agg([\"mean\", \"std\", \"count\"])\n",
+        "    .reset_index()\n",
+        "    .sort_values(\"mean\", ascending=True)\n",
+        ")\n",
+        "\n",
+        "fig = go.Figure()\n",
+        "fig.add_trace(go.Bar(\n",
+        "    x=resumen[\"mean\"],\n",
+        "    y=resumen[\"carrera\"],\n",
+        "    orientation=\"h\",\n",
+        "    error_x=dict(type=\"data\", array=resumen[\"std\"], visible=True),\n",
+        "    marker_color=resumen[\"mean\"],\n",
+        "    marker_colorscale=\"RdYlGn_r\",\n",
+        "    marker_showscale=True,\n",
+        "    marker_colorbar=dict(title=\"Morosidad %\"),\n",
+        "    hovertemplate=\"<b>%{y}</b><br>Morosidad: %{x:.1f}%<extra></extra>\",\n",
+        "))\n",
+        "\n",
+        "fig.update_layout(\n",
+        "    title=\"Morosidad promedio por carrera\",\n",
+        "    xaxis_title=\"Morosidad (%)\",\n",
+        "    yaxis_title=\"\",\n",
+        "    template=\"plotly_white\",\n",
+        "    font_family=\"Inter\",\n",
+        "    height=420,\n",
+        ")\n",
+        "fig.show()"
+      ],
+      "id": "morosidad-carrera",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## 2. Distribución por tipo de institución"
+      ],
+      "id": "fa9db1bf"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: violin-institucion\n",
+        "#| fig-cap: Distribución de morosidad por tipo de institución.\n",
+        "\n",
+        "fig = px.violin(\n",
+        "    df,\n",
+        "    x=\"institucion\",\n",
+        "    y=\"morosidad\",\n",
+        "    color=\"institucion\",\n",
+        "    box=True,\n",
+        "    points=\"outliers\",\n",
+        "    color_discrete_sequence=px.colors.qualitative.Pastel,\n",
+        "    labels={\"morosidad\": \"Morosidad (%)\", \"institucion\": \"Institución\"},\n",
+        "    template=\"plotly_white\",\n",
+        ")\n",
+        "fig.update_layout(\n",
+        "    showlegend=False,\n",
+        "    font_family=\"Inter\",\n",
+        "    title=\"Morosidad por tipo de institución\",\n",
+        ")\n",
+        "fig.show()"
+      ],
+      "id": "violin-institucion",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## 3. Mapa por región"
+      ],
+      "id": "03556e44"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: barras-region\n",
+        "#| fig-cap: Morosidad promedio por región.\n",
+        "\n",
+        "por_region = (\n",
+        "    df.groupby(\"region\")[\"morosidad\"]\n",
+        "    .mean()\n",
+        "    .reset_index()\n",
+        "    .sort_values(\"morosidad\", ascending=False)\n",
+        ")\n",
+        "\n",
+        "fig = px.bar(\n",
+        "    por_region,\n",
+        "    x=\"region\",\n",
+        "    y=\"morosidad\",\n",
+        "    color=\"morosidad\",\n",
+        "    color_continuous_scale=\"Reds\",\n",
+        "    text_auto=\".1f\",\n",
+        "    labels={\"morosidad\": \"Morosidad (%)\", \"region\": \"Región\"},\n",
+        "    template=\"plotly_white\",\n",
+        ")\n",
+        "fig.update_layout(\n",
+        "    title=\"Morosidad promedio por región\",\n",
+        "    font_family=\"Inter\",\n",
+        "    showlegend=False,\n",
+        "    coloraxis_showscale=False,\n",
+        ")\n",
+        "fig.show()"
+      ],
+      "id": "barras-region",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## 4. Relación deuda vs. morosidad"
+      ],
+      "id": "86bb057c"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: scatter-deuda\n",
+        "#| fig-cap: Cada punto es una carrera×institución. Tamaño proporcional al número de deudores.\n",
+        "\n",
+        "fig = px.scatter(\n",
+        "    df,\n",
+        "    x=\"deuda_promedio\",\n",
+        "    y=\"morosidad\",\n",
+        "    color=\"institucion\",\n",
+        "    size=\"n_deudores\",\n",
+        "    hover_name=\"carrera\",\n",
+        "    hover_data={\"region\": True, \"deuda_promedio\": \":,.0f\", \"morosidad\": \":.1f%\"},\n",
+        "    labels={\n",
+        "        \"deuda_promedio\": \"Deuda promedio (CLP)\",\n",
+        "        \"morosidad\": \"Morosidad (%)\",\n",
+        "        \"institucion\": \"Institución\",\n",
+        "    },\n",
+        "    color_discrete_sequence=px.colors.qualitative.Set2,\n",
+        "    template=\"plotly_white\",\n",
+        "    opacity=0.7,\n",
+        ")\n",
+        "fig.update_layout(font_family=\"Inter\", title=\"Deuda vs. Morosidad\")\n",
+        "fig.show()"
+      ],
+      "id": "scatter-deuda",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "## Tabla de datos"
+      ],
+      "id": "dfaab5f5"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "#| label: tabla\n",
+        "\n",
+        "from IPython.display import HTML\n",
+        "\n",
+        "tabla = (\n",
+        "    df.groupby([\"carrera\", \"institucion\"])\n",
+        "    .agg(\n",
+        "        morosidad_prom=(\"morosidad\", \"mean\"),\n",
+        "        deuda_prom=(\"deuda_promedio\", \"mean\"),\n",
+        "        n=(\"n_deudores\", \"sum\"),\n",
+        "    )\n",
+        "    .reset_index()\n",
+        "    .sort_values(\"morosidad_prom\", ascending=False)\n",
+        "    .head(20)\n",
+        ")\n",
+        "\n",
+        "tabla[\"morosidad_prom\"] = tabla[\"morosidad_prom\"].map(\"{:.1f}%\".format)\n",
+        "tabla[\"deuda_prom\"]     = tabla[\"deuda_prom\"].map(\"${:,.0f}\".format)\n",
+        "tabla[\"n\"]              = tabla[\"n\"].map(\"{:,}\".format)\n",
+        "tabla.columns           = [\"Carrera\", \"Institución\", \"Morosidad\", \"Deuda prom.\", \"Deudores\"]\n",
+        "\n",
+        "HTML(tabla.to_html(index=False, classes=\"table table-striped table-hover dataframe\"))"
+      ],
+      "id": "tabla",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "name": "python3",
+      "language": "python",
+      "display_name": "Python 3 (ipykernel)",
+      "path": "C:\\Users\\juanm\\AppData\\Local\\Programs\\Python\\Python314\\share\\jupyter\\kernels\\python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
